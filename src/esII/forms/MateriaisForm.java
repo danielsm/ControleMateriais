@@ -259,17 +259,16 @@ public class MateriaisForm extends javax.swing.JFrame {
 
     private void addNewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addNewButtonActionPerformed
         // TODO add your handling code here:
-       
-       int num = Integer.parseInt(qntdText.getText());
+
        if (nomeMatTxt.getText().isEmpty()){
            JOptionPane.showMessageDialog(null, "Insira o nome do Material", "Erro", JOptionPane.ERROR_MESSAGE);
        }
-       if (qntdText.getText().isEmpty() || num <= 0){
+       if (qntdText.getText().isEmpty() || (!qntdText.getText().isEmpty() && Integer.parseInt(qntdText.getText()) <= 0)){
            JOptionPane.showMessageDialog(null, "A Quantidade deve ser maior que 0", "Erro", JOptionPane.ERROR_MESSAGE);
        }
        
        if (!nomeMatTxt.getText().isEmpty() && !qntdText.getText().isEmpty() && Integer.parseInt(qntdText.getText()) > 0){
-             
+           int num = Integer.parseInt(qntdText.getText());  
            Material m = new Material();
            m.setId_tarefa(localTarefa.getId());
            m.setNome(nomeMatTxt.getText());
@@ -297,8 +296,8 @@ public class MateriaisForm extends javax.swing.JFrame {
                     MaterialDAO.deletaMaterial(id);
                 }
             }
-            
-            listMateriais();
+            DefaultTableModel tableModel = (DefaultTableModel)materiaisTable.getModel();
+            tableModel.setNumRows(0);
             JOptionPane.showMessageDialog(null, "Material excluido com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             
         }

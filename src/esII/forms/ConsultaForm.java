@@ -5,9 +5,9 @@
  */
 package esII.forms;
 
+import esII.dao.MaterialDAO;
 import esII.dao.TarefaDAO;
 import esII.entidades.*;
-import javax.swing.JOptionPane;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
@@ -21,19 +21,21 @@ public class ConsultaForm extends javax.swing.JFrame {
      * Creates new form ConsultaForm
      */
     Projeto projeto;
+    int semanaConsulta;
     List<Tarefa> tarefas;
-    public ConsultaForm(Projeto p) {
+    List<Material> materiais;
+    public ConsultaForm(Projeto p, int semana) {
+        
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         this.projeto = p;
+        this.semanaConsulta = semana;
         initComponents();
-        setTitle(this.projeto.getNome());
-        consultarButton.setEnabled(false);
-        semanaSpinner.setEnabled(false);
+        setTitle("Consulta do Projeto: "+this.projeto.getNome());
         
         nomeProjeto.setText(this.projeto.getNome());
         durProjeto.setText(Integer.toString(this.projeto.getDuracao()) + " Semana(s)");
-        
-        listarTarefas();
+        semanaConLabel.setText(Integer.toString(this.semanaConsulta) + "ª");
+        listar();
         
     }
 
@@ -50,27 +52,17 @@ public class ConsultaForm extends javax.swing.JFrame {
         nomeProjeto = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         durProjeto = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        semanaSpinner = new javax.swing.JSpinner();
-        consultarButton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tarefasTable = new javax.swing.JTable();
         voltarButton = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        semanaConLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("Nome do Projeto:");
 
         jLabel2.setText("Duração:");
-
-        jLabel3.setText("Consultar Tarefas nas semana:");
-
-        consultarButton.setText("Consultar");
-        consultarButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                consultarButtonActionPerformed(evt);
-            }
-        });
 
         tarefasTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -80,14 +72,14 @@ public class ConsultaForm extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Id", "Tarefa", "Semana Inicio", "Duração"
+                "Material", "Situação (Material)", "Tarefa", "Situação (Tarefa)"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -108,38 +100,38 @@ public class ConsultaForm extends javax.swing.JFrame {
             }
         });
 
+        jLabel4.setText("Semana Consultada:");
+
+        semanaConLabel.setText("jLabel5");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(13, Short.MAX_VALUE)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(durProjeto))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(nomeProjeto))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(semanaSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(9, 9, 9)))
-                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(voltarButton)
-                .addGap(18, 18, 18)
-                .addComponent(consultarButton)
-                .addGap(49, 49, 49))
+                .addGap(21, 21, 21))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 569, Short.MAX_VALUE)
+                        .addGap(24, 24, 24))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(nomeProjeto)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(durProjeto)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(semanaConLabel)
+                        .addGap(98, 98, 98))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -151,67 +143,53 @@ public class ConsultaForm extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(durProjeto))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(25, 25, 25)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(semanaSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(20, 89, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(voltarButton)
-                            .addComponent(consultarButton))
-                        .addGap(30, 30, 30))))
+                    .addComponent(durProjeto)
+                    .addComponent(jLabel4)
+                    .addComponent(semanaConLabel))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 78, Short.MAX_VALUE)
+                .addComponent(voltarButton)
+                .addGap(35, 35, 35))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
-    private void listarTarefas(){
+    private void listar(){
        
         tarefas = TarefaDAO.getTarefasByNomeProjeto(projeto.getNome());
-        
-        DefaultTableModel tableModel = new DefaultTableModel(0, 4);
-        tableModel.setColumnIdentifiers(new Object[]{"Id","Descrição","Inicio(Semana)","Duração"});
+        String situacaoMat,situacaTar;
+        DefaultTableModel tableModel = new DefaultTableModel(0, 3);
+        tableModel.setColumnIdentifiers(new Object[]{"Material","Situação (Material)", "Tarefa", "Situação (Tarefa)"});
         
         for (Tarefa t:tarefas){
-            tableModel.addRow(new Object[]{t.getId(),t.getDescricao(),t.getSemanaInicio(),t.getDuracao()});
-            tarefasTable.setModel(tableModel);
+            materiais = MaterialDAO.getMateriaisByIdTarefa(t.getId());
+            for (Material m:materiais){
+                
+                if(semanaConsulta < t.getSemanaInicio()){
+                    situacaTar = "Tarefa Futura";
+                    situacaoMat = "Disponivel";
+                }
+                else if (semanaConsulta >= t.getSemanaInicio() && semanaConsulta <= t.getSemanaInicio()+(t.getDuracao()-1)){
+                    situacaTar = "Em andamento";
+                    situacaoMat = "Em uso";
+                }
+                else {
+                    situacaTar = "Tarefa Finalizada";
+                    situacaoMat = "Usado";
+                }
+                
+                tableModel.addRow(new Object[]{m.getNome(),situacaoMat,t.getDescricao(), situacaTar});
+                tarefasTable.setModel(tableModel);
+            }
 
         }
 
-        consultarButton.setEnabled(true);
-        semanaSpinner.setEnabled(true);
+        voltarButton.setEnabled(true);
         
     }
     
-    private void consultarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultarButtonActionPerformed
-        // TODO add your handling code here:
-        int num = (Integer)semanaSpinner.getValue();
-        int index = tarefasTable.getSelectedRow();
-       
-        if (index < 0){
-            JOptionPane.showMessageDialog(null, "Selecione uma TAREFA para consulta", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
-        if (num <= 0){
-            JOptionPane.showMessageDialog(null, "É necessário especificar uma semana", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
-        
-        if(index >= 0 && num > 0){
-           // System.out.println(tarefasTable.getModel().getValueAt(index, 0).toString());
-            
-            int id = Integer.parseInt(tarefasTable.getModel().getValueAt(index, 0).toString());
-                  
-            MaterialTable materiais = new MaterialTable(TarefaDAO.getTarefaById(id), num);
-            materiais.setVisible(true);
-        }
-    }//GEN-LAST:event_consultarButtonActionPerformed
-
     private void voltarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_voltarButtonActionPerformed
         // TODO add your handling code here:
         dispose();
@@ -253,14 +231,13 @@ public class ConsultaForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton consultarButton;
     private javax.swing.JLabel durProjeto;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel nomeProjeto;
-    private javax.swing.JSpinner semanaSpinner;
+    private javax.swing.JLabel semanaConLabel;
     private javax.swing.JTable tarefasTable;
     private javax.swing.JButton voltarButton;
     // End of variables declaration//GEN-END:variables
