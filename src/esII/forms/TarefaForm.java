@@ -5,13 +5,13 @@
  */
 package esII.forms;
 
-import esII.dao.TarefaDAO;
+import esII.dao.*;
 import esII.entidades.Projeto;
 import esII.entidades.Tarefa;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -25,10 +25,12 @@ public class TarefaForm extends javax.swing.JFrame {
     List<Tarefa> localTarefas = new ArrayList<>();
     Projeto projetoLocal;
     public TarefaForm(Projeto p) {
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         this.projetoLocal = p;
         setTitle("Projeto "+p.getNome() +"- Tarefas");
         initComponents();
         finalizarTarButton.setEnabled(false);
+        deleteButton.setEnabled(false);
         clear();
     }
     
@@ -42,8 +44,6 @@ public class TarefaForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tarefasJList = new javax.swing.JList();
         jLabel1 = new javax.swing.JLabel();
         addTarefaButton = new javax.swing.JButton();
         descricaoTextField = new javax.swing.JTextField();
@@ -57,15 +57,11 @@ public class TarefaForm extends javax.swing.JFrame {
         cancelButton = new javax.swing.JButton();
         finalizarTarButton = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
+        deleteButton = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tarefasTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        tarefasJList.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Nenhuma tarefa cadastrada." };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane1.setViewportView(tarefasJList);
 
         jLabel1.setText("Tarefas Cadastradas:");
 
@@ -111,72 +107,114 @@ public class TarefaForm extends javax.swing.JFrame {
 
         jLabel5.setText("Semanas");
 
+        deleteButton.setText("Remover");
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteButtonActionPerformed(evt);
+            }
+        });
+
+        tarefasTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Descrição", "Inicio (Semana)", "Duração"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(tarefasTable);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jSeparator2)
             .addGroup(layout.createSequentialGroup()
+                .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(descricaoTextField, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(inicioSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel4)
-                                        .addGap(1, 1, 1)
-                                        .addComponent(durSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jLabel5))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(cancelButton)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(addNewTarButton)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(finalizarTarButton)))
-                                .addGap(20, 20, 20))))
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(descricaoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(177, 177, 177)
-                        .addComponent(addTarefaButton)))
-                .addContainerGap(27, Short.MAX_VALUE))
-            .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGap(135, 135, 135)
+                        .addComponent(deleteButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(addTarefaButton))
+                    .addComponent(jLabel1)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(inicioSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(29, 29, 29)
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(durSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(7, 7, 7))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(cancelButton)
+                                .addGap(18, 18, 18)
+                                .addComponent(addNewTarButton)
+                                .addGap(18, 18, 18)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(finalizarTarButton)
+                            .addComponent(jLabel5))))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(145, 145, 145)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(deleteButton)
+                            .addComponent(addTarefaButton))))
                 .addGap(18, 18, 18)
-                .addComponent(addTarefaButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(7, 7, 7)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(descricaoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(descricaoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(inicioSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
                     .addComponent(durSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
-                .addGap(34, 34, 34)
+                .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(finalizarTarButton)
                     .addComponent(addNewTarButton)
-                    .addComponent(cancelButton)
-                    .addComponent(finalizarTarButton))
-                .addGap(28, 28, 28))
+                    .addComponent(cancelButton))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         pack();
@@ -206,12 +244,17 @@ public class TarefaForm extends javax.swing.JFrame {
     
     
     private void listTarefas(){
-         DefaultListModel listModel = new DefaultListModel(); 
+         DefaultTableModel tableModel = new DefaultTableModel(0,4); 
+         tableModel.setColumnIdentifiers(new Object[]{"Id","Descrição","Inicio(Semana)","Duração"});
+         List<Tarefa> bdTarefas = TarefaDAO.getTarefasByNomeProjeto(projetoLocal.getNome());
 
-         for (Tarefa t:localTarefas){
-             listModel.addElement(t.getDescricao());
-         }
-         tarefasJList.setModel(listModel);
+         for (Tarefa t:bdTarefas){
+            tableModel.addRow(new Object[]{t.getId(),t.getDescricao(),t.getSemanaInicio(),t.getDuracao()});
+            tarefasTable.setModel(tableModel);
+
+        }
+         //tarefasJList.setModel(listModel);
+         deleteButton.setEnabled(true);
     }
     
     private void addNewTarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addNewTarButtonActionPerformed
@@ -247,7 +290,9 @@ public class TarefaForm extends javax.swing.JFrame {
                 listTarefas();
                 finalizarTarButton.setEnabled(true);
                 clear();
-                MateriaisForm matForm = new MateriaisForm();
+                TarefaDAO.criaTarefa(t);
+                listTarefas();
+                MateriaisForm matForm = new MateriaisForm(t);
                 matForm.setVisible(true);
             }
             else{
@@ -255,10 +300,7 @@ public class TarefaForm extends javax.swing.JFrame {
             }
             
         }
-        
-        
-        
-        
+       
     }//GEN-LAST:event_addNewTarButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
@@ -278,13 +320,32 @@ public class TarefaForm extends javax.swing.JFrame {
 
     private void finalizarTarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_finalizarTarButtonActionPerformed
         // TODO add your handling code here:
-        
-        for (Tarefa t:localTarefas){
-            
-            //TarefaDAO.criaTarefa(t);
-        }
+       
         dispose();
     }//GEN-LAST:event_finalizarTarButtonActionPerformed
+
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+        // TODO add your handling code here:
+        int index = tarefasTable.getSelectedRow();
+        List<Tarefa> bdTarefas = TarefaDAO.getTarefasByNomeProjeto(projetoLocal.getNome());
+
+        int id = Integer.parseInt(tarefasTable.getModel().getValueAt(index, 0).toString());
+        
+        if (index >= 0){
+            for (Tarefa t:bdTarefas){
+                if (id == t.getId()){
+                    TarefaDAO.deletaTarefa(id);
+                }
+            }
+
+            JOptionPane.showMessageDialog(null, "Tarefa excluida com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            listTarefas();
+        }
+        else {
+            JOptionPane.showMessageDialog(null,"Nenhuma Tarefa foi selecionada", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+        
+    }//GEN-LAST:event_deleteButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -326,6 +387,7 @@ public class TarefaForm extends javax.swing.JFrame {
     private javax.swing.JButton addNewTarButton;
     private javax.swing.JButton addTarefaButton;
     private javax.swing.JButton cancelButton;
+    private javax.swing.JButton deleteButton;
     private javax.swing.JTextField descricaoTextField;
     private javax.swing.JSpinner durSpinner;
     private javax.swing.JButton finalizarTarButton;
@@ -335,8 +397,8 @@ public class TarefaForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JList tarefasJList;
+    private javax.swing.JTable tarefasTable;
     // End of variables declaration//GEN-END:variables
 }

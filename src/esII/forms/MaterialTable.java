@@ -5,8 +5,7 @@
  */
 package esII.forms;
 
-import esII.dao.MaterialDAO;
-import esII.dao.ProjetoDAO;
+import esII.dao.*;
 import esII.entidades.*;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;

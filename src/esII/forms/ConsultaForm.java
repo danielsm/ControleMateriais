@@ -7,10 +7,8 @@ package esII.forms;
 
 import esII.dao.TarefaDAO;
 import esII.entidades.*;
-import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import java.util.List;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -100,10 +98,8 @@ public class ConsultaForm extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        tarefasTable.setColumnSelectionAllowed(true);
         tarefasTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(tarefasTable);
-        tarefasTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         voltarButton.setText("Voltar");
         voltarButton.addActionListener(new java.awt.event.ActionListener() {
@@ -180,18 +176,18 @@ public class ConsultaForm extends javax.swing.JFrame {
        
         tarefas = TarefaDAO.getTarefasByNomeProjeto(projeto.getNome());
         
-        DefaultTableModel tableModel = new DefaultTableModel(0, 3);
+        DefaultTableModel tableModel = new DefaultTableModel(0, 4);
         tableModel.setColumnIdentifiers(new Object[]{"Id","Descrição","Inicio(Semana)","Duração"});
-        if (tarefas.size() > 0){
-            for (Tarefa t:tarefas){
-                tableModel.addRow(new Object[]{t.getId(),t.getDescricao(),t.getSemanaInicio(),t.getDuracao()});
-                tarefasTable.setModel(tableModel);
-               
-            }
-            
-            consultarButton.setEnabled(true);
-            semanaSpinner.setEnabled(true);
+        
+        for (Tarefa t:tarefas){
+            tableModel.addRow(new Object[]{t.getId(),t.getDescricao(),t.getSemanaInicio(),t.getDuracao()});
+            tarefasTable.setModel(tableModel);
+
         }
+
+        consultarButton.setEnabled(true);
+        semanaSpinner.setEnabled(true);
+        
     }
     
     private void consultarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultarButtonActionPerformed

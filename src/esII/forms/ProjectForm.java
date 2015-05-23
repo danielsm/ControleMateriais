@@ -25,7 +25,7 @@ public class ProjectForm extends javax.swing.JFrame {
     List<Projeto> todosProjetos;
     
     public ProjectForm() {
-        
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         initComponents();
         listProjects();
         projectNameTxtField.setEnabled(false);
@@ -33,9 +33,7 @@ public class ProjectForm extends javax.swing.JFrame {
         addNewButton.setEnabled(false);
         cancelarButton.setEnabled(false);
         
-        //verificarButton.setEnabled(false);
-        //deleteButton.setEnabled(false);
-        //setVisible(true);
+        
     }
 
     /**
@@ -61,6 +59,7 @@ public class ProjectForm extends javax.swing.JFrame {
         addNewButton = new javax.swing.JButton();
         cancelarButton = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
+        sairButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -124,6 +123,13 @@ public class ProjectForm extends javax.swing.JFrame {
             }
         });
 
+        sairButton.setText("Sair");
+        sairButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sairButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -139,21 +145,22 @@ public class ProjectForm extends javax.swing.JFrame {
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(projectNameTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(0, 61, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(duracaoSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(duracaoSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel3))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(287, 287, 287)
+                                .addGap(8, 8, 8)
+                                .addComponent(sairButton, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
                                 .addComponent(cancelarButton)
                                 .addGap(18, 18, 18)
-                                .addComponent(addNewButton, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(72, Short.MAX_VALUE))))
+                                .addComponent(addNewButton, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel3))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(layout.createSequentialGroup()
                 .addGap(157, 157, 157)
                 .addComponent(consultarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -171,7 +178,7 @@ public class ProjectForm extends javax.swing.JFrame {
                 .addComponent(ProjectsLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(ProjectScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(deleteButton)
                     .addComponent(consultarButton)
@@ -187,10 +194,11 @@ public class ProjectForm extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(duracaoSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addNewButton)
-                    .addComponent(cancelarButton))
+                    .addComponent(cancelarButton)
+                    .addComponent(sairButton))
                 .addGap(37, 37, 37))
         );
 
@@ -209,14 +217,7 @@ public class ProjectForm extends javax.swing.JFrame {
         duracaoSpinner.setEnabled(true);
         addNewButton.setEnabled(true);
         cancelarButton.setEnabled(true);
-//        setEnabled(false);
-//        NewProjectForm criaNovoProjeto = new NewProjectForm();
-//        criaNovoProjeto.setVisible(true);
-//        while (criaNovoProjeto.isActive()){ 
-//            setEnabled(false); 
-//        }
-//        setEnabled(true);
-//        
+        
     }//GEN-LAST:event_criarProjectButtonActionPerformed
 
     private void projectNameTxtFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_projectNameTxtFieldActionPerformed
@@ -226,7 +227,7 @@ public class ProjectForm extends javax.swing.JFrame {
     private void addNewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addNewButtonActionPerformed
         // TODO add your handling code here:
        
-        String name;
+        
         int dur = (Integer)duracaoSpinner.getValue();
         
         if (projectNameTxtField.getText().isEmpty()){
@@ -241,7 +242,7 @@ public class ProjectForm extends javax.swing.JFrame {
             p.setNome(projectNameTxtField.getText());
             p.setDuracao(dur);
             localProjetos.add(p);
-            //ProjetoDAO.criarProjeto(p);
+            ProjetoDAO.criarProjeto(p);
             //dispose();
             listProjects();
             
@@ -299,7 +300,7 @@ public class ProjectForm extends javax.swing.JFrame {
         if (index >= 0){
             Object o = ProjectsList.getModel().getElementAt(index);
             //System.out.println(o); 
-             //ProjetoDAO.deletaProjeto(o.toString());
+             ProjetoDAO.deletaProjeto(o.toString());
             
             JOptionPane.showMessageDialog(null, "Projeto excluido com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             listProjects();
@@ -310,6 +311,12 @@ public class ProjectForm extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_deleteButtonActionPerformed
+
+    private void sairButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sairButtonActionPerformed
+        // TODO add your handling code here:
+        dispose();
+        System.exit(1);
+    }//GEN-LAST:event_sairButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -347,9 +354,7 @@ public class ProjectForm extends javax.swing.JFrame {
                 new ProjectForm().setVisible(true);
             }
         });
-        
-        
-        // Listar os projetos existentes, se houverem
+       
         
     }
     
@@ -390,5 +395,6 @@ public class ProjectForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField projectNameTxtField;
+    private javax.swing.JButton sairButton;
     // End of variables declaration//GEN-END:variables
 }
