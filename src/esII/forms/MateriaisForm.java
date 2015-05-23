@@ -50,6 +50,17 @@ public class MateriaisForm extends javax.swing.JFrame {
          //tarefasJList.setModel(listModel);
     }
     
+    
+    private void clear(){
+        nomeMatTxt.setText("");
+        qntdText.setText("");
+        
+        nomeMatTxt.setEnabled(false);
+        qntdText.setEnabled(false);
+        cancelButton.setEnabled(false);
+        addNewButton.setEnabled(false);
+        addMaterialButton.setEnabled(true);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -227,16 +238,7 @@ public class MateriaisForm extends javax.swing.JFrame {
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         // TODO add your handling code here:
-        nomeMatTxt.setText("");
-        qntdText.setText("");
-        
-        nomeMatTxt.setEnabled(false);
-        qntdText.setEnabled(false);
-        cancelButton.setEnabled(false);
-        addNewButton.setEnabled(false);
-        //confirmButton.setEnabled(false);
-        
-        addNewButton.setEnabled(true);
+        clear();
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void confirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmButtonActionPerformed
@@ -276,6 +278,7 @@ public class MateriaisForm extends javax.swing.JFrame {
                    
            removerButton.setEnabled(true);
            confirmButton.setEnabled(true);
+           clear();
            listMateriais();
        }
     }//GEN-LAST:event_addNewButtonActionPerformed
@@ -285,22 +288,23 @@ public class MateriaisForm extends javax.swing.JFrame {
         int index = materiaisTable.getSelectedRow();
         
         List<Material> bdMateriais = MaterialDAO.getMateriaisByIdTarefa(localTarefa.getId());
-
-        int id = Integer.parseInt(materiaisTable.getModel().getValueAt(index, 0).toString());
         
         if (index >= 0){
+            int id = Integer.parseInt(materiaisTable.getModel().getValueAt(index, 0).toString());
             for (Material m:bdMateriais){
                 if (id == m.getId()){
                     MaterialDAO.deletaMaterial(id);
                 }
             }
 
-            JOptionPane.showMessageDialog(null, "Tarefa excluida com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Material excluido com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             listMateriais();
         }
         else {
-            JOptionPane.showMessageDialog(null,"Nenhuma Tarefa foi selecionada", "Erro", JOptionPane.ERROR_MESSAGE);
-        }   
+            JOptionPane.showMessageDialog(null,"Nenhuma Material foi selecionado", "Erro", JOptionPane.ERROR_MESSAGE);
+        } 
+        
+        
     }//GEN-LAST:event_removerButtonActionPerformed
     
     

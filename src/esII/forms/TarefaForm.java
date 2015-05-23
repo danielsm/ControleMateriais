@@ -221,11 +221,17 @@ public class TarefaForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     
     private void clear(){
+        Object o = (Object)0;
+        descricaoTextField.setText("");
+        inicioSpinner.setValue(o);
+        durSpinner.setValue(o);
+        
         descricaoTextField.setEnabled(false);
         inicioSpinner.setEnabled(false);
         durSpinner.setEnabled(false);
         addNewTarButton.setEnabled(false); 
         cancelButton.setEnabled(false);
+        addTarefaButton.setEnabled(true);
     }
     
     private void descricaoTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_descricaoTextFieldActionPerformed
@@ -289,11 +295,13 @@ public class TarefaForm extends javax.swing.JFrame {
                 localTarefas.add(t);
                 listTarefas();
                 finalizarTarButton.setEnabled(true);
-                clear();
+                
                 TarefaDAO.criaTarefa(t);
                 listTarefas();
                 MateriaisForm matForm = new MateriaisForm(t);
                 matForm.setVisible(true);
+                
+                clear();
             }
             else{
                 JOptionPane.showMessageDialog(null, "Duração da TAREFA excede a duração do PROJETO", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -329,9 +337,8 @@ public class TarefaForm extends javax.swing.JFrame {
         int index = tarefasTable.getSelectedRow();
         List<Tarefa> bdTarefas = TarefaDAO.getTarefasByNomeProjeto(projetoLocal.getNome());
 
-        int id = Integer.parseInt(tarefasTable.getModel().getValueAt(index, 0).toString());
-        
         if (index >= 0){
+            int id = Integer.parseInt(tarefasTable.getModel().getValueAt(index, 0).toString());
             for (Tarefa t:bdTarefas){
                 if (id == t.getId()){
                     TarefaDAO.deletaTarefa(id);

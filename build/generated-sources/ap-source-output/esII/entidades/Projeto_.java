@@ -8,7 +8,6 @@ import javax.persistence.metamodel.StaticMetamodel;
 @StaticMetamodel(Projeto.class)
 public abstract class Projeto_ {
 
-	public static volatile SingularAttribute<Projeto, Long> id;
 	public static volatile SingularAttribute<Projeto, Integer> duracao;
 	public static volatile SingularAttribute<Projeto, String> nome;
 
