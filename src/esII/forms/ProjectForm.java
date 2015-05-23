@@ -282,7 +282,8 @@ public class ProjectForm extends javax.swing.JFrame {
                     while (true){
                         try {
                             semaCons = Integer.parseInt(JOptionPane.showInputDialog(null,"Digite a semana de interesse: ","Semana para Consulta",JOptionPane.INFORMATION_MESSAGE));
-                            break;
+                            if (semaCons > 0 && semaCons < p.getDuracao()) break;
+                            else JOptionPane.showMessageDialog(null,"Digite um número de 1 a " + p.getDuracao(), "Erro",JOptionPane.ERROR_MESSAGE);
                         } catch (Exception e) {
                             JOptionPane.showMessageDialog(null,"Digite um número de 1 a " + p.getDuracao(), "Erro",JOptionPane.ERROR_MESSAGE);
                         }
