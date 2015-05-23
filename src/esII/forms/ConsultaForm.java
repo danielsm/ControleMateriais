@@ -25,6 +25,7 @@ public class ConsultaForm extends javax.swing.JFrame {
     Projeto projeto;
     List<Tarefa> tarefas;
     public ConsultaForm(Projeto p) {
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         this.projeto = p;
         initComponents();
         setTitle(this.projeto.getNome());
@@ -56,6 +57,7 @@ public class ConsultaForm extends javax.swing.JFrame {
         consultarButton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tarefasTable = new javax.swing.JTable();
+        voltarButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -103,6 +105,13 @@ public class ConsultaForm extends javax.swing.JFrame {
         jScrollPane2.setViewportView(tarefasTable);
         tarefasTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
+        voltarButton.setText("Voltar");
+        voltarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                voltarButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -115,22 +124,26 @@ public class ConsultaForm extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(28, 28, 28)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel2)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(durProjeto))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel1)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(nomeProjeto)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(durProjeto))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(nomeProjeto))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(consultarButton)
-                                    .addComponent(semanaSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                .addComponent(semanaSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(9, 9, 9)))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(voltarButton)
+                .addGap(18, 18, 18)
+                .addComponent(consultarButton)
+                .addGap(49, 49, 49))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -143,15 +156,21 @@ public class ConsultaForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(durProjeto))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(semanaSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(35, 35, 35)
-                .addComponent(consultarButton)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(25, 25, 25)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(semanaSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(20, 89, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(voltarButton)
+                            .addComponent(consultarButton))
+                        .addGap(30, 30, 30))))
         );
 
         pack();
@@ -162,7 +181,7 @@ public class ConsultaForm extends javax.swing.JFrame {
         tarefas = TarefaDAO.getTarefasByNomeProjeto(projeto.getNome());
         
         DefaultTableModel tableModel = new DefaultTableModel(0, 3);
-        tableModel.setColumnIdentifiers(new Object[]{"Id","Descrição","Semana Inicio","Duração"});
+        tableModel.setColumnIdentifiers(new Object[]{"Id","Descrição","Inicio(Semana)","Duração"});
         if (tarefas.size() > 0){
             for (Tarefa t:tarefas){
                 tableModel.addRow(new Object[]{t.getId(),t.getDescricao(),t.getSemanaInicio(),t.getDuracao()});
@@ -188,13 +207,19 @@ public class ConsultaForm extends javax.swing.JFrame {
         }
         
         if(index >= 0 && num > 0){
-            System.out.println(tarefasTable.getModel().getValueAt(index, 0).toString());
+           // System.out.println(tarefasTable.getModel().getValueAt(index, 0).toString());
             
-//            //int id = (Integer)tarefasTable.getModel().getValueAt(index, 0);
-//            MaterialTable materiais = new MaterialTable(TarefaDAO.getTarefaById(id), num);
-//            materiais.setVisible(true);
+            int id = Integer.parseInt(tarefasTable.getModel().getValueAt(index, 0).toString());
+                  
+            MaterialTable materiais = new MaterialTable(TarefaDAO.getTarefaById(id), num);
+            materiais.setVisible(true);
         }
     }//GEN-LAST:event_consultarButtonActionPerformed
+
+    private void voltarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_voltarButtonActionPerformed
+        // TODO add your handling code here:
+        dispose();
+    }//GEN-LAST:event_voltarButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -241,5 +266,6 @@ public class ConsultaForm extends javax.swing.JFrame {
     private javax.swing.JLabel nomeProjeto;
     private javax.swing.JSpinner semanaSpinner;
     private javax.swing.JTable tarefasTable;
+    private javax.swing.JButton voltarButton;
     // End of variables declaration//GEN-END:variables
 }
