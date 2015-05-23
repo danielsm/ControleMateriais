@@ -33,6 +33,7 @@ public class ConsultaForm extends javax.swing.JFrame {
         
         nomeProjeto.setText(this.projeto.getNome());
         durProjeto.setText(Integer.toString(this.projeto.getDuracao()) + " Semana(s)");
+        
         listarTarefas();
         
     }
@@ -73,20 +74,20 @@ public class ConsultaForm extends javax.swing.JFrame {
 
         tarefasTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Tarefa", "Duração"
+                "Id", "Tarefa", "Semana Inicio", "Duração"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -160,13 +161,15 @@ public class ConsultaForm extends javax.swing.JFrame {
        
         tarefas = TarefaDAO.getTarefasByNomeProjeto(projeto.getNome());
         
-        DefaultTableModel tableModel = new DefaultTableModel(0, 2);
-        
+        DefaultTableModel tableModel = new DefaultTableModel(0, 3);
+        tableModel.setColumnIdentifiers(new Object[]{"Id","Descrição","Semana Inicio","Duração"});
         if (tarefas.size() > 0){
             for (Tarefa t:tarefas){
-                tableModel.addRow(new Object[]{(Object)t.getDescricao(),(Object)t.getDuracao()});
-                tarefasTable.setModel(tableModel);   
+                tableModel.addRow(new Object[]{t.getId(),t.getDescricao(),t.getSemanaInicio(),t.getDuracao()});
+                tarefasTable.setModel(tableModel);
+               
             }
+            
             consultarButton.setEnabled(true);
             semanaSpinner.setEnabled(true);
         }
@@ -185,8 +188,11 @@ public class ConsultaForm extends javax.swing.JFrame {
         }
         
         if(index >= 0 && num > 0){
-            System.out.println(tarefasTable.getModel().getValueAt(index, 1).toString());
-            //MateriaisForm materiais = new MateriaisForm();
+            System.out.println(tarefasTable.getModel().getValueAt(index, 0).toString());
+            
+//            //int id = (Integer)tarefasTable.getModel().getValueAt(index, 0);
+//            MaterialTable materiais = new MaterialTable(TarefaDAO.getTarefaById(id), num);
+//            materiais.setVisible(true);
         }
     }//GEN-LAST:event_consultarButtonActionPerformed
 

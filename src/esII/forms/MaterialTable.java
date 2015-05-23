@@ -5,8 +5,11 @@
  */
 package esII.forms;
 
+import esII.dao.MaterialDAO;
+import esII.dao.ProjetoDAO;
 import esII.entidades.*;
 import java.util.List;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -19,9 +22,12 @@ public class MaterialTable extends javax.swing.JFrame {
      */
     Tarefa tarefa;
     List<Material> materiais;
-    public MaterialTable(Tarefa t) {
+    int semanaConsulta;
+    public MaterialTable(Tarefa t, int num) {
         this.tarefa = t;
+        this.semanaConsulta = num;
         initComponents();
+        listMateriais();
     }
 
     /**
@@ -92,7 +98,35 @@ public class MaterialTable extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    private void listMateriais(){
+        
+        materiais = MaterialDAO.getMateriaisByIdTarefa(tarefa.getId());
+        String estado = "";
+        DefaultTableModel tableModel = new DefaultTableModel(0, 3);
+        tableModel.setColumnIdentifiers(new Object[]{"Id","Descrição","Duração"});
+        if (materiais.size() > 0){
+            for (Material m:materiais){
+                if (semanaConsulta < tarefa.getSemanaInicio()) {
+                    estado = "Tarefas Futuras";
+                }
+                else if(semanaConsulta > tarefa.getSemanaInicio()){
+                    if (semanaConsulta <= tarefa.getSemanaInicio()+
+                        (tarefa.getDuracao()-1)){
+                            estado = "Material em uso";
+                    }
+                    else{
+                        estado = "Material utilizado";
+                    }
+                }
+                
+                tableModel.addRow(new Object[]{estado, m.getNome(),m.getQuantidade()});
+                materiaisTable.setModel(tableModel);   
+            }
+            
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */
