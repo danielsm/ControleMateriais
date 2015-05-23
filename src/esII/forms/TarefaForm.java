@@ -6,7 +6,9 @@
 package esII.forms;
 
 import esII.dao.TarefaDAO;
+import esII.entidades.Projeto;
 import esII.entidades.Tarefa;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
@@ -20,15 +22,14 @@ public class TarefaForm extends javax.swing.JFrame {
     /**
      * Creates new form TarefaForm
      */
-    List<Tarefa> tarefas;
-    
-    public TarefaForm() {
+    List<Tarefa> localTarefas = new ArrayList<>();
+    Projeto projetoLocal;
+    public TarefaForm(Projeto p) {
+        this.projetoLocal = p;
+        setTitle("Projeto "+p.getNome() +"- Tarefas");
         initComponents();
-        descricaoTextField.setEnabled(false);
-        inicioSpinner.setEnabled(false);
-        durSpinner.setEnabled(false);
-        addNewTarButton.setEnabled(false); 
-        cancelButton.setEnabled(false);
+        finalizarTarButton.setEnabled(false);
+        clear();
     }
     
    
@@ -54,6 +55,7 @@ public class TarefaForm extends javax.swing.JFrame {
         addNewTarButton = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
         cancelButton = new javax.swing.JButton();
+        finalizarTarButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -99,6 +101,13 @@ public class TarefaForm extends javax.swing.JFrame {
             }
         });
 
+        finalizarTarButton.setText("Finalizar");
+        finalizarTarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                finalizarTarButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -120,7 +129,10 @@ public class TarefaForm extends javax.swing.JFrame {
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(cancelButton)
                                     .addGap(18, 18, 18)
-                                    .addComponent(addNewTarButton))
+                                    .addComponent(addNewTarButton)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(finalizarTarButton)
+                                    .addGap(20, 20, 20))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 432, Short.MAX_VALUE)
@@ -156,13 +168,22 @@ public class TarefaForm extends javax.swing.JFrame {
                 .addGap(34, 34, 34)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addNewTarButton)
-                    .addComponent(cancelButton))
+                    .addComponent(cancelButton)
+                    .addComponent(finalizarTarButton))
                 .addGap(28, 28, 28))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    private void clear(){
+        descricaoTextField.setEnabled(false);
+        inicioSpinner.setEnabled(false);
+        durSpinner.setEnabled(false);
+        addNewTarButton.setEnabled(false); 
+        cancelButton.setEnabled(false);
+    }
+    
     private void descricaoTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_descricaoTextFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_descricaoTextFieldActionPerformed
@@ -175,12 +196,16 @@ public class TarefaForm extends javax.swing.JFrame {
         durSpinner.setEnabled(true);
         addNewTarButton.setEnabled(true);
         cancelButton.setEnabled(true);
-
     }//GEN-LAST:event_addTarefaButtonActionPerformed
     
     
     private void listTarefas(){
-        
+         DefaultListModel listModel = new DefaultListModel(); 
+
+         for (Tarefa t:localTarefas){
+             listModel.addElement(t.getDescricao());
+         }
+         tarefasJList.setModel(listModel);
     }
     
     private void addNewTarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addNewTarButtonActionPerformed
@@ -208,14 +233,20 @@ public class TarefaForm extends javax.swing.JFrame {
         if (!desc.isEmpty() && inicio > 0 && dur > 0){
             Tarefa t = new Tarefa();
             t.setDescricao(desc);
-            //t.setNome_projeto(nome_Projeto);
+            t.setNome_projeto(projetoLocal.getNome());
             t.setSemanaInicio(inicio);
             t.setDuracao(dur);
-            //tarefas.add(t);
+            localTarefas.add(t);
+            listTarefas();
+            finalizarTarButton.setEnabled(true);
+            clear();
+            MateriaisForm matForm = new MateriaisForm();
+            matForm.setVisible(true);
+            
+            
         }
         
-        MateriaisForm matForm = new MateriaisForm();
-        matForm.setVisible(true);
+        
         
         
     }//GEN-LAST:event_addNewTarButtonActionPerformed
@@ -234,6 +265,16 @@ public class TarefaForm extends javax.swing.JFrame {
         addNewTarButton.setEnabled(false);  
         cancelButton.setEnabled(false);
     }//GEN-LAST:event_cancelButtonActionPerformed
+
+    private void finalizarTarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_finalizarTarButtonActionPerformed
+        // TODO add your handling code here:
+        
+        for (Tarefa t:localTarefas){
+            
+            //TarefaDAO.criaTarefa(t);
+        }
+        dispose();
+    }//GEN-LAST:event_finalizarTarButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -265,7 +306,7 @@ public class TarefaForm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TarefaForm().setVisible(true);
+                //new TarefaForm(Pr).setVisible(true);
                 
             }
         });
@@ -277,6 +318,7 @@ public class TarefaForm extends javax.swing.JFrame {
     private javax.swing.JButton cancelButton;
     private javax.swing.JTextField descricaoTextField;
     private javax.swing.JSpinner durSpinner;
+    private javax.swing.JButton finalizarTarButton;
     private javax.swing.JSpinner inicioSpinner;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
