@@ -33,8 +33,8 @@ public class ProjectForm extends javax.swing.JFrame {
         addNewButton.setEnabled(false);
         cancelarButton.setEnabled(false);
         
-        verificarButton.setEnabled(false);
-        deleteButton.setEnabled(false);
+        //verificarButton.setEnabled(false);
+        //deleteButton.setEnabled(false);
         //setVisible(true);
     }
 
@@ -260,7 +260,12 @@ public class ProjectForm extends javax.swing.JFrame {
         int index = ProjectsList.getSelectedIndex();
         if (index >=0){
             Object o = ProjectsList.getModel().getElementAt(index);
-            System.out.println(o);
+            //System.out.println(o);
+            ConsultaForm consulta = new ConsultaForm(ProjetoDAO.getProjetoByNome(o.toString()));
+            consulta.setVisible(true);
+        }
+        else {
+            JOptionPane.showMessageDialog(null,"Nenhum Projeto foi selecionado", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_verificarButtonActionPerformed
 
@@ -358,10 +363,14 @@ public class ProjectForm extends javax.swing.JFrame {
                 listModel.addElement(p.getNome());
             }
             ProjectsList.setModel(listModel);
+            verificarButton.setEnabled(true);
+            deleteButton.setEnabled(true);
        }
        else {
            listModel.addElement("Nenhum Projeto Criado.");
            ProjectsList.setModel(listModel);
+            verificarButton.setEnabled(false);
+            deleteButton.setEnabled(false);
        }
        
       
