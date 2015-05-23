@@ -302,8 +302,9 @@ public class ProjectForm extends javax.swing.JFrame {
             //System.out.println(o); 
              ProjetoDAO.deletaProjeto(o.toString());
             
-            JOptionPane.showMessageDialog(null, "Projeto excluido com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             listProjects();
+            JOptionPane.showMessageDialog(null, "Projeto excluido com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            
         }
         else {
             JOptionPane.showMessageDialog(null,"Nenhum Projeto foi selecionado", "Erro", JOptionPane.ERROR_MESSAGE);

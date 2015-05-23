@@ -344,9 +344,9 @@ public class TarefaForm extends javax.swing.JFrame {
                     TarefaDAO.deletaTarefa(id);
                 }
             }
-
-            JOptionPane.showMessageDialog(null, "Tarefa excluida com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             listTarefas();
+            JOptionPane.showMessageDialog(null, "Tarefa excluida com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            
         }
         else {
             JOptionPane.showMessageDialog(null,"Nenhuma Tarefa foi selecionada", "Erro", JOptionPane.ERROR_MESSAGE);
