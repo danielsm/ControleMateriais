@@ -15,6 +15,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author daniel
  */
+//Classe para mostrar as Tarefas e Materiais do Projeto selecionado
 public class ConsultaForm extends javax.swing.JFrame {
 
     /**
@@ -156,6 +157,7 @@ public class ConsultaForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
+    //Lista as Tarefas e Materiais do Projeto selecionado
     private void listar(){
        
         tarefas = TarefaDAO.getTarefasByNomeProjeto(projeto.getNome());

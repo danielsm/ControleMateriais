@@ -22,7 +22,7 @@ public class MateriaisForm extends javax.swing.JFrame {
      * Creates new form MateriaisForm
      */
     List<Material> materiais = new ArrayList<>();
-    Tarefa localTarefa;
+    Tarefa localTarefa; // tarefa atual
     public MateriaisForm(Tarefa t) {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         this.localTarefa = t;
@@ -37,6 +37,7 @@ public class MateriaisForm extends javax.swing.JFrame {
         
     }
     
+    //Listar as os Materias ja adicionados
     private void listMateriais(){
         DefaultTableModel tableModel = new DefaultTableModel(0,3); 
         tableModel.setColumnIdentifiers(new Object[] {"Id","Nome", "Quantidade"});
@@ -47,10 +48,9 @@ public class MateriaisForm extends javax.swing.JFrame {
             materiaisTable.setModel(tableModel);
         }
         
-         //tarefasJList.setModel(listModel);
     }
     
-    
+    // desabilitar a area de criacao de materiais
     private void clear(){
         nomeMatTxt.setText("");
         qntdText.setText("");
@@ -131,12 +131,6 @@ public class MateriaisForm extends javax.swing.JFrame {
         });
 
         jLabel2.setText("Nome:");
-
-        nomeMatTxt.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nomeMatTxtActionPerformed(evt);
-            }
-        });
 
         jLabel3.setText("Quantidade:");
 
@@ -232,20 +226,19 @@ public class MateriaisForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
    
-    private void nomeMatTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nomeMatTxtActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_nomeMatTxtActionPerformed
-
+    // chama o clear para desabilitar a area de criacao de materiais
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         // TODO add your handling code here:
         clear();
     }//GEN-LAST:event_cancelButtonActionPerformed
-
+    
+    //apos pelo menos 1 material eh criado, o usuario pode sair desta tela
     private void confirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmButtonActionPerformed
         // TODO add your handling code here:
         dispose();
     }//GEN-LAST:event_confirmButtonActionPerformed
-
+    
+    //habilitar a area de criacao de materiais
     private void addMaterialButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMaterialButtonActionPerformed
         // TODO add your handling code here:
         addMaterialButton.setEnabled(false);
@@ -256,7 +249,8 @@ public class MateriaisForm extends javax.swing.JFrame {
         addNewButton.setEnabled(true);
         
     }//GEN-LAST:event_addMaterialButtonActionPerformed
-
+    
+    //Adicionar a nova tarefa ao banco, caso os campos tenham sido preenchidos
     private void addNewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addNewButtonActionPerformed
         // TODO add your handling code here:
 
@@ -282,7 +276,8 @@ public class MateriaisForm extends javax.swing.JFrame {
            listMateriais();
        }
     }//GEN-LAST:event_addNewButtonActionPerformed
-
+    
+    //remover uma tarefa selecionada
     private void removerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerButtonActionPerformed
         // TODO add your handling code here:
         int index = materiaisTable.getSelectedRow();

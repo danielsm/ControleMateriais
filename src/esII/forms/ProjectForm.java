@@ -21,8 +21,8 @@ public class ProjectForm extends javax.swing.JFrame {
     /**
      * Creates new form ProjectForm
      */
-    List<Projeto> localProjetos = new ArrayList<>();
-    List<Projeto> bdProjetos;
+    List<Projeto> localProjetos = new ArrayList<>(); // lista local de projetos 
+    List<Projeto> bdProjetos; // lista de projetos contidos no banco de dados
 
     public ProjectForm() {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -86,12 +86,6 @@ public class ProjectForm extends javax.swing.JFrame {
         });
 
         jLabel1.setText("Nome:");
-
-        projectNameTxtField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                projectNameTxtFieldActionPerformed(evt);
-            }
-        });
 
         jLabel2.setText("Duração:");
 
@@ -219,7 +213,8 @@ public class ProjectForm extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    // Metodo para disponibilizar a area de criacao de Projeto.
     private void criarProjectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_criarProjectButtonActionPerformed
           // TODO add your handling code here:
 
@@ -234,23 +229,23 @@ public class ProjectForm extends javax.swing.JFrame {
         cancelarButton.setEnabled(true);
 
     }//GEN-LAST:event_criarProjectButtonActionPerformed
-
-    private void projectNameTxtFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_projectNameTxtFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_projectNameTxtFieldActionPerformed
-
+    
+    //Metodo para verificar os dados inseridos pelo usuario e se corretos, adiciona o novo
+    //Projeto no banco de dados e instancia o proximo form, o de Tarefas.
     private void addNewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addNewButtonActionPerformed
         // TODO add your handling code here:
 
         int dur = (Integer) duracaoSpinner.getValue();
-
+        // se o campo de nome estiver vazio, mostra erro e nao faz nada
         if (projectNameTxtField.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Por favor insira um nome para o projeto", "Erro", JOptionPane.ERROR_MESSAGE);
         }
+        // se o campo de duracao for menor que 0, mostra erro e nao faz nada
         if (dur <= 0) {
             JOptionPane.showMessageDialog(null, "Projeto deve ter no minimo 1 semana", "Erro", JOptionPane.ERROR_MESSAGE);
         }
-
+        //se o nome nao esta vazio e a duracao for maior que 0, adiciona novo projeto ao banco
+        // e vai para o proximo passo, criar as Tarefas.
         if (!projectNameTxtField.getText().isEmpty() && dur > 0) {
             Projeto p = new Projeto();
             p.setNome(projectNameTxtField.getText());
@@ -269,7 +264,8 @@ public class ProjectForm extends javax.swing.JFrame {
             // setTempProj;
         }
     }//GEN-LAST:event_addNewButtonActionPerformed
-
+    
+    //Metodo de Consulta de Projeto. Instancia o form de Consulta se houver algum projeto selecionado.
     private void consultarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultarButtonActionPerformed
         // TODO add your handling code here:
         int semaCons;
@@ -298,7 +294,8 @@ public class ProjectForm extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_consultarButtonActionPerformed
-
+    
+    //Metodo para desativar a area de Criacao de Projeto caso botao cancele é pressionado.
     private void clear() {
         Object o = (Object) 0;
 
@@ -321,7 +318,8 @@ public class ProjectForm extends javax.swing.JFrame {
         clear();
 
     }//GEN-LAST:event_cancelarButtonActionPerformed
-
+    
+    //Metodo para excluir Projeto selecionado
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         // TODO add your handling code here: 
         int index = projetosTable.getSelectedRow();
@@ -342,7 +340,7 @@ public class ProjectForm extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_deleteButtonActionPerformed
-
+    //Finalizar a execução
     private void sairButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sairButtonActionPerformed
         // TODO add your handling code here:
         dispose();
@@ -385,7 +383,8 @@ public class ProjectForm extends javax.swing.JFrame {
         });
 
     }
-
+    
+    //Metodo para listar os Projetos cadastrados no banco e colocar na tabela do form.
     private void listProjects() {
         DefaultTableModel tableModel = new DefaultTableModel(0, 2);
         tableModel.setColumnIdentifiers(new Object[]{"Nome", "Duração"});

@@ -22,8 +22,8 @@ public class TarefaForm extends javax.swing.JFrame {
     /**
      * Creates new form TarefaForm
      */
-    List<Tarefa> localTarefas = new ArrayList<>();
-    Projeto projetoLocal;
+    List<Tarefa> localTarefas = new ArrayList<>(); 
+    Projeto projetoLocal; // Projeto que esta sendo criado, vindo do form anterior, ProjectForm.
     public TarefaForm(Projeto p) {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         this.projetoLocal = p;
@@ -69,12 +69,6 @@ public class TarefaForm extends javax.swing.JFrame {
         addTarefaButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addTarefaButtonActionPerformed(evt);
-            }
-        });
-
-        descricaoTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                descricaoTextFieldActionPerformed(evt);
             }
         });
 
@@ -220,6 +214,7 @@ public class TarefaForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
+    //Metodo para desabilitar a area de edicao e criacao de nova tarefa
     private void clear(){
         Object o = (Object)0;
         descricaoTextField.setText("");
@@ -234,10 +229,7 @@ public class TarefaForm extends javax.swing.JFrame {
         addTarefaButton.setEnabled(true);
     }
     
-    private void descricaoTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_descricaoTextFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_descricaoTextFieldActionPerformed
-
+    // Habilita a area de criacao de nova tarefa quando pressionado o botao Adicionar Nova
     private void addTarefaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addTarefaButtonActionPerformed
         // TODO add your handling code here:
         addTarefaButton.setEnabled(false);
@@ -248,7 +240,7 @@ public class TarefaForm extends javax.swing.JFrame {
         cancelButton.setEnabled(true);
     }//GEN-LAST:event_addTarefaButtonActionPerformed
     
-    
+    // Lista as tarefas existentes ou ja criadas para o projeto atual.
     private void listTarefas(){
          DefaultTableModel tableModel = new DefaultTableModel(0,4); 
          tableModel.setColumnIdentifiers(new Object[]{"Id","Descrição","Inicio(Semana)","Duração"});
@@ -263,9 +255,9 @@ public class TarefaForm extends javax.swing.JFrame {
          deleteButton.setEnabled(true);
     }
     
+    //Adiciona uma nova tarefa ao banco, ligada ao projeto atual
     private void addNewTarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addNewTarButtonActionPerformed
         // TODO add your handling code here:
-        
         String desc;
         int dur, inicio;
         desc = descricaoTextField.getText();
@@ -310,28 +302,21 @@ public class TarefaForm extends javax.swing.JFrame {
         }
        
     }//GEN-LAST:event_addNewTarButtonActionPerformed
-
+    
+    // Desabilitar a area de criaca de tarefa
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         // TODO add your handling code here:
-        Object o = (Object)0;
-        descricaoTextField.setText(" ");
-        inicioSpinner.setValue(o);
-        durSpinner.setValue(o);
-        
-        addTarefaButton.setEnabled(true);
-        descricaoTextField.setEnabled(false);
-        inicioSpinner.setEnabled(false);
-        durSpinner.setEnabled(false);
-        addNewTarButton.setEnabled(false);  
-        cancelButton.setEnabled(false);
+        clear();
     }//GEN-LAST:event_cancelButtonActionPerformed
-
+    
+    // quando pelo menos 1 tarefa eh criada, o usuario pode sair do form de criacao de tarefas.
     private void finalizarTarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_finalizarTarButtonActionPerformed
         // TODO add your handling code here:
        
         dispose();
     }//GEN-LAST:event_finalizarTarButtonActionPerformed
-
+    
+    //Deletar uma tarefa criada
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         // TODO add your handling code here:
         int index = tarefasTable.getSelectedRow();
