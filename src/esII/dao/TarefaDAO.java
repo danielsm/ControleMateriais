@@ -25,7 +25,7 @@ public class TarefaDAO {
     public static void criaTarefa(Tarefa nova){
         session = DAO.getSession();
     	tx = session.beginTransaction();
-        session.save(nova);
+        session.saveOrUpdate(nova);
         tx.commit();
     }
     

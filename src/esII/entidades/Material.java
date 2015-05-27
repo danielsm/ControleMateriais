@@ -22,7 +22,6 @@ import javax.persistence.Table;
 public class Material implements Serializable{
     @Id
     @Column(name="id_material")
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
     @Column(name="id_tarefa")

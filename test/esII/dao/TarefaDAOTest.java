@@ -5,6 +5,7 @@
  */
 package esII.dao;
 
+import esII.entidades.Projeto;
 import esII.entidades.Tarefa;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,75 +16,80 @@ import junit.framework.TestCase;
  * @author willian
  */
 public class TarefaDAOTest extends TestCase {
-    Tarefa tar = new Tarefa();
+    Projeto projTar = new Projeto();
+    Tarefa tar1 = new Tarefa();
+    Tarefa tar2 = new Tarefa();
+    Tarefa tar3 = new Tarefa();
+    
     public TarefaDAOTest(String testName) {
         super(testName);
-        tar.setNome_projeto("default");
-        tar.setDuracao(2);
-        tar.setSemanaInicio(0);
-        tar.setDescricao("lalalala");  
-        TarefaDAO.criaTarefa(tar);
+        
+        projTar.setNome("projTar");
+        projTar.setDuracao(1);
+        ProjetoDAO.criarProjeto(projTar);
+        
+        tar1.setId(1L);
+        tar1.setNome_projeto("projTar");
+        tar1.setSemanaInicio(1);
+        tar1.setDuracao(1);
+        tar1.setDescricao("123");
+        
+        tar2.setId(2L);
+        tar2.setNome_projeto("projTar");
+        tar2.setSemanaInicio(1);
+        tar2.setDuracao(1);
+        tar2.setDescricao("123");
+        
+        tar3.setId(3L);
+        tar3.setNome_projeto("projTar");
+        tar3.setSemanaInicio(1);
+        tar3.setDuracao(1);
+        tar3.setDescricao("123");
+        
+        TarefaDAO.criaTarefa(tar1);
+        TarefaDAO.criaTarefa(tar2);
     }
 
     /**
      * Test of criaTarefa method, of class TarefaDAO.
      */
     public void testCriaTarefa() {
-        System.out.println("criaTarefa");
-        TarefaDAO.criaTarefa(tar);
-        List<Tarefa>result = TarefaDAO.getTarefasByNomeProjeto("default");
-        ArrayList<Tarefa>tal = (ArrayList)result;
-        for(int i = 0 ; i < tal.size() ; i++){
-            System.out.println(tal.get(i).getDescricao()+" "+tal.get(i).getId());
-        }
-        assertEquals(tar.getId(), tal.get(tal.size()-1).getId());
+        TarefaDAO.criaTarefa(tar3);
+        assertNotNull(TarefaDAO.getTarefaById(3L));
     }
 
     /**
      * Test of deletaTarefa method, of class TarefaDAO.
      */
     public void testDeletaTarefa() {
-        System.out.println("deletaTarefa");
-        long id = 1L;
-        System.out.println(TarefaDAO.getTarefaById(id).getNome_projeto());
-        TarefaDAO.deletaTarefa(id);
-        assertEquals(TarefaDAO.getTarefaById(id), null);
-        TarefaDAO.criaTarefa(tar);
+        TarefaDAO.deletaTarefa(2L);
+        assertNull(TarefaDAO.getTarefaById(2L));
     }
 
     /**
      * Test of updateTarefa method, of class TarefaDAO.
      */
     public void testUpdateTarefa() {
-        System.out.println("updateTarefa");
-        tar.setNome_projeto("default2");
-        TarefaDAO.updateTarefa(tar);
-        ArrayList<Tarefa>tarefa = (ArrayList<Tarefa>)TarefaDAO.getTarefasByNomeProjeto("default2");
-        for(int i = 0 ; i < tarefa.size() ;i++){
-            assertEquals(tarefa.get(i).getNome_projeto(), "default2");
-        }
+        Tarefa aux = TarefaDAO.getTarefaById(1L);
+        aux.setDuracao(100);
+        TarefaDAO.updateTarefa(aux);
+        Tarefa result = TarefaDAO.getTarefaById(1L);
+        assertEquals(aux.getDuracao(), result.getDuracao());
     }
 
     /**
      * Test of getTarefaById method, of class TarefaDAO.
      */
     public void testGetTarefaById() {
-        System.out.println("getTarefaById");
-        long id = 2L;
-        Tarefa result = TarefaDAO.getTarefaById(id);
-        assertNotNull(result);
+        assertNotNull(TarefaDAO.getTarefaById(1L));
     }
 
     /**
      * Test of getTarefasByNomeProjeto method, of class TarefaDAO.
      */
     public void testGetTarefasByNomeProjeto() {
-        System.out.println("getTarefasByNomeProjeto");
-        String nome = "default";
-        List<Tarefa> result = TarefaDAO.getTarefasByNomeProjeto(nome);
-        for(int i = 0 ; i < result.size() ;i++){
-            assertEquals(result.get(i).getNome_projeto(), nome);
-        }
+        List<Tarefa> lista = TarefaDAO.getTarefasByNomeProjeto("projTar");
+        assertTrue(lista != null && !lista.isEmpty());
     }
     
 }
