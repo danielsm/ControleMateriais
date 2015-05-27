@@ -25,7 +25,7 @@ public class MaterialDAO {
     public static void criaMaterial(Material novo){
         session = DAO.getSession();
         tx = session.beginTransaction();
-        session.saveOrUpdate(novo);
+        session.save(novo);
         tx.commit();
     }
     

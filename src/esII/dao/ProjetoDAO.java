@@ -24,7 +24,7 @@ public class ProjetoDAO {
     public static void criarProjeto(Projeto novo){
         session = DAO.getSession();
     	tx = session.beginTransaction();
-    	session.saveOrUpdate(novo);
+    	session.save(novo);
     	tx.commit();
     }
     

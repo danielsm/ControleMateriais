@@ -23,6 +23,7 @@ import javax.persistence.Table;
 public class Tarefa implements Serializable{
     @Id
     @Column(name="id_tarefa")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
     @Column(name="nome_projeto")

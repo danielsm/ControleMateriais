@@ -6,8 +6,6 @@
 package esII.dao;
 
 import esII.entidades.Material;
-import esII.entidades.Projeto;
-import esII.entidades.Tarefa;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
@@ -18,83 +16,87 @@ import junit.framework.TestCase;
  * @author willian
  */
 public class MaterialDAOTest extends TestCase {
-    
-    Projeto projMat = new Projeto();
-    
-    Tarefa tarMat = new Tarefa();
-    
-    Material mat1 = new Material();
+    Material mat = new Material();
     Material mat2 = new Material();
-    Material mat3 = new Material();
-    
-    
     public MaterialDAOTest(String testName) {
         super(testName);   
-        
-        projMat.setNome("projMat");
-        projMat.setDuracao(1);
-        ProjetoDAO.criarProjeto(projMat);
-        
-        tarMat.setId(4L);
-        tarMat.setDescricao("123");
-        tarMat.setDuracao(1);
-        tarMat.setNome_projeto("projMat");
-        tarMat.setSemanaInicio(1);
-        TarefaDAO.criaTarefa(tarMat);
-        
-        mat1.setId(1L);
-        mat1.setId_tarefa(4L);
-        mat1.setNome("mat1");
-        mat1.setQuantidade(1);
-        MaterialDAO.criaMaterial(mat1);
-        
-        mat2.setId(2L);
-        mat2.setId_tarefa(4L);
-        mat2.setNome("mat1");
-        mat2.setQuantidade(1);
+        mat.setId_tarefa(0);
+        mat.setNome("marial_teste3");
+        mat.setQuantidade(2);
+        mat2.setId_tarefa(0);
+        mat2.setNome("marial_teste2");
+        mat2.setQuantidade(3);
+        MaterialDAO.criaMaterial(mat);
         MaterialDAO.criaMaterial(mat2);
-        
-        mat3.setId(3L);
-        mat3.setId_tarefa(4L);
-        mat3.setNome("mat1");
-        mat3.setQuantidade(1);
-        
     }
 
-    public void  testCriaMaterial(){
-        MaterialDAO.criaMaterial(mat3);
-        assertNotNull(MaterialDAO.getMaterialById(3L));
+    /**
+     * Teste de time out, verifica se um registro no banco demora mais que 100ms.
+     */
+    public void  testTimeoutCriaMaterial()throws InterruptedException,TimeoutException{
+        Thread thread = new Thread(){
+          public void run(){
+              System.out.println("criaMaterial");
+              //Material novo = null;
+              MaterialDAO.criaMaterial(mat);
+          }  
+        };
+        thread.start();
+        Thread.sleep(10000);//depende de especificação do cliente
+        thread.interrupt();
+        if(thread.isInterrupted()){
+            System.out.println("testTimeoutCriaMaterial() * falhou");
+            fail("time out");
+        }
     }
     /**
      * Test of getMaterialById method, of class MaterialDAO.
      */
     public void testGetMaterialById() {
-        assertNotNull(MaterialDAO.getMaterialById(1L));
+        System.out.println("getMaterialById");
+        long id = 2L;
+        Material expResult = mat2;
+        Material result = MaterialDAO.getMaterialById(id);
+        assertEquals(expResult.getNome(), result.getNome());
     }
 
     /**
      * Test of getMateriaisByIdTarefa method, of class MaterialDAO.
      */
     public void testGetMateriaisByIdTarefa() {
-        List<Material> lista = MaterialDAO.getMateriaisByIdTarefa(4L);
-        assertTrue(!lista.isEmpty());
+        System.out.println("getMateriaisByIdTarefa");
+        long id_tarefa = 0;
+        List<Material> expResult = new ArrayList<Material>();
+        expResult.add(mat);
+        expResult.add(mat2);
+        List<Material> result = MaterialDAO.getMateriaisByIdTarefa(id_tarefa);
+        System.out.println(result.size()+"-"+expResult.size()+"**");
+        for(int i = 0 ; i < expResult.size() ; i++){
+            assertEquals(expResult.get(i).getNome(), result.get(i).getNome());
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        //fail("The test case is a prototype.");
     }
     /**
      * Test of deletaMaterial method, of class MaterialDAO.
      **/
     public void testDeletaMaterial() {
-        MaterialDAO.criaMaterial(mat2);
-        MaterialDAO.deletaMaterial(2L);
-        assertNull(MaterialDAO.getMaterialById(2L));
+        System.out.println("deletaMaterial");
+        long id = 1L;
+        int num = MaterialDAO.getMateriaisByIdTarefa(0L).size();
+        MaterialDAO.deletaMaterial(id);
+        assertEquals(num-1,MaterialDAO.getMateriaisByIdTarefa(0L).size());
+        // TODO review the generated test code and remove the default call to fail.
+        //fail("The test case is a prototype.");
     }
     /**
      * Test of updateMaterial method, of class MaterialDAO.
      */
     public void testUpdateMaterial() {
-        Material aux = MaterialDAO.getMaterialById(1L);
-        aux.setNome("mat11");
-        MaterialDAO.updateMaterial(aux);
-        Material result = MaterialDAO.getMaterialById(1L);
-        assertEquals(aux.getNome(), result.getNome());
+        System.out.println("updateMaterial");
+        Material m;
+        MaterialDAO.updateMaterial(mat);
+        m = MaterialDAO.getMaterialById(2);
+        System.out.println(m.getId());
     }
 }
