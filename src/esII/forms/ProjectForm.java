@@ -23,15 +23,19 @@ public class ProjectForm extends javax.swing.JFrame {
      */
     List<Projeto> localProjetos = new ArrayList<>(); // lista local de projetos 
     List<Projeto> bdProjetos; // lista de projetos contidos no banco de dados
-
+    
     public ProjectForm() {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        
         initComponents();
         listProjects();
         projectNameTxtField.setEnabled(false);
         duracaoSpinner.setEnabled(false);
         addNewButton.setEnabled(false);
         cancelarButton.setEnabled(false);
+        updateProjButton.setEnabled(false);
+        inserirTarButton.setEnabled(false);
+        setTitle("Controle de Materiais");
 
     }
 
@@ -59,6 +63,10 @@ public class ProjectForm extends javax.swing.JFrame {
         sairButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         projetosTable = new javax.swing.JTable();
+        modificarButton = new javax.swing.JButton();
+        jSeparator2 = new javax.swing.JSeparator();
+        updateProjButton = new javax.swing.JButton();
+        inserirTarButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -140,45 +148,79 @@ public class ProjectForm extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(projetosTable);
 
+        modificarButton.setText("Editar");
+        modificarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                modificarButtonActionPerformed(evt);
+            }
+        });
+
+        updateProjButton.setText("Atualizar");
+        updateProjButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateProjButtonActionPerformed(evt);
+            }
+        });
+
+        inserirTarButton.setText("Editar/Inserir Tarefa");
+        inserirTarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inserirTarButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(60, 60, 60)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSeparator1)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(60, 60, 60)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(97, 97, 97)
-                                .addComponent(consultarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(criarProjectButton, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(ProjectsLabel)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel1)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(projectNameTxtField))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel2)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(duracaoSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel3)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addComponent(sairButton, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(26, 26, 26)
-                                            .addComponent(cancelarButton)
-                                            .addGap(24, 24, 24)
-                                            .addComponent(addNewButton, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                        .addGap(0, 56, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 494, Short.MAX_VALUE)
+                        .addGap(56, 56, 56))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(ProjectsLabel)
+                        .addContainerGap(404, Short.MAX_VALUE))))
+            .addComponent(jSeparator1)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(96, 96, 96)
+                .addComponent(consultarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(modificarButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(criarProjectButton, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(57, 57, 57))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(cancelarButton)
+                        .addGap(18, 18, 18)
+                        .addComponent(inserirTarButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(updateProjButton)
+                        .addGap(18, 18, 18)
+                        .addComponent(addNewButton, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel2)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(duracaoSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jLabel3)
+                            .addGap(232, 232, 232))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel1)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(projectNameTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 438, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(sairButton, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(2, 2, 2)))
+                .addGap(54, 54, 54))
+            .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -186,15 +228,16 @@ public class ProjectForm extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(ProjectsLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(24, 24, 24)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(deleteButton)
                     .addComponent(consultarButton)
+                    .addComponent(modificarButton)
+                    .addComponent(deleteButton)
                     .addComponent(criarProjectButton))
-                .addGap(7, 7, 7)
+                .addGap(18, 18, 18)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(projectNameTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -203,12 +246,17 @@ public class ProjectForm extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(duracaoSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(sairButton)
+                    .addComponent(addNewButton)
                     .addComponent(cancelarButton)
-                    .addComponent(addNewButton))
-                .addGap(25, 25, 25))
+                    .addComponent(updateProjButton)
+                    .addComponent(inserirTarButton))
+                .addGap(25, 25, 25)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(sairButton)
+                .addGap(28, 28, 28))
         );
 
         pack();
@@ -217,12 +265,13 @@ public class ProjectForm extends javax.swing.JFrame {
     // Metodo para disponibilizar a area de criacao de Projeto.
     private void criarProjectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_criarProjectButtonActionPerformed
           // TODO add your handling code here:
-
-        projetosTable.setEnabled(false);
+        projectNameTxtField.setText(" ");
+        duracaoSpinner.setValue((Object)0);
         criarProjectButton.setEnabled(false);
         consultarButton.setEnabled(false);
         deleteButton.setEnabled(false);
-
+        modificarButton.setEnabled(false);
+        inserirTarButton.setEnabled(false);
         projectNameTxtField.setEnabled(true);
         duracaoSpinner.setEnabled(true);
         addNewButton.setEnabled(true);
@@ -237,7 +286,7 @@ public class ProjectForm extends javax.swing.JFrame {
 
         int dur = (Integer) duracaoSpinner.getValue();
         // se o campo de nome estiver vazio, mostra erro e nao faz nada
-        if (projectNameTxtField.getText().isEmpty()) {
+        if (projectNameTxtField.getText().isEmpty() || projectNameTxtField.getText().equals(" ")) {
             JOptionPane.showMessageDialog(null, "Por favor insira um nome para o projeto", "Erro", JOptionPane.ERROR_MESSAGE);
         }
         // se o campo de duracao for menor que 0, mostra erro e nao faz nada
@@ -248,19 +297,20 @@ public class ProjectForm extends javax.swing.JFrame {
         // e vai para o proximo passo, criar as Tarefas.
         if (!projectNameTxtField.getText().isEmpty() && dur > 0) {
             Projeto p = new Projeto();
-            p.setNome(projectNameTxtField.getText());
+            p.setNome(projectNameTxtField.getText().trim());
             p.setDuracao(dur);
             localProjetos.add(p);
             ProjetoDAO.criarProjeto(p);
             //dispose();
+            
             listProjects();
-
-            TarefaForm tarefaForm = new TarefaForm(p);
-            tarefaForm.setVisible(true);
-
-            consultarButton.setEnabled(true);
-            deleteButton.setEnabled(true);
-            clear();
+            
+            consultarButton.setEnabled(false);
+            deleteButton.setEnabled(false);
+            modificarButton.setEnabled(false);
+            addNewButton.setEnabled(false);
+            inserirTarButton.setEnabled(true);
+            criarProjectButton.setEnabled(true);
             // setTempProj;
         }
     }//GEN-LAST:event_addNewButtonActionPerformed
@@ -302,14 +352,20 @@ public class ProjectForm extends javax.swing.JFrame {
         projectNameTxtField.setText(" ");
         duracaoSpinner.setValue(o);
         projetosTable.setEnabled(true);
-        consultarButton.setEnabled(true);
-        deleteButton.setEnabled(true);
         criarProjectButton.setEnabled(true);
-
+        if (!bdProjetos.isEmpty()){
+            consultarButton.setEnabled(true);
+            deleteButton.setEnabled(true);
+            modificarButton.setEnabled(true);
+        }
+        
+        
         projectNameTxtField.setEnabled(false);
         duracaoSpinner.setEnabled(false);
         addNewButton.setEnabled(false);
+        inserirTarButton.setEnabled(false);
         cancelarButton.setEnabled(false);
+        updateProjButton.setEnabled(false);
     }
 
 
@@ -346,6 +402,55 @@ public class ProjectForm extends javax.swing.JFrame {
         dispose();
         System.exit(1);
     }//GEN-LAST:event_sairButtonActionPerformed
+
+    private void modificarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificarButtonActionPerformed
+        // TODO add your handling code here:
+        
+        int index = projetosTable.getSelectedRow();
+        if (index >= 0) {
+            criarProjectButton.setEnabled(false);
+            consultarButton.setEnabled(false);
+            deleteButton.setEnabled(false);
+            modificarButton.setEnabled(false);
+            projetosTable.setEnabled(false);
+           
+            projectNameTxtField.setEnabled(true);
+            duracaoSpinner.setEnabled(true);
+            cancelarButton.setEnabled(true);
+            inserirTarButton.setEnabled(true);
+            updateProjButton.setEnabled(true);
+            
+            String nome = projetosTable.getModel().getValueAt(index, 0).toString();
+            projectNameTxtField.setText(nome);
+            duracaoSpinner.setValue((Object)Integer.parseInt(projetosTable.getModel().getValueAt(index, 1).toString()));
+            
+            //listProjects();
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Nenhum Projeto foi selecionado", "Erro", JOptionPane.ERROR_MESSAGE);
+        }   
+    }//GEN-LAST:event_modificarButtonActionPerformed
+
+    private void inserirTarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inserirTarButtonActionPerformed
+        // TODO add your handling code here:
+        String nome = projectNameTxtField.getText();
+        int dur = (Integer) duracaoSpinner.getValue();
+        if (nome.equals(" ") || nome.isEmpty()){
+             JOptionPane.showMessageDialog(null, "Nenhum projeto selecionado", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+        else if (dur <= 0){
+             JOptionPane.showMessageDialog(null, "Projeto deve ter no minimo 1 semana", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+        else if(!nome.equals(" ") && !nome.isEmpty() && dur > 0){
+            TarefaForm tarForm = new TarefaForm(ProjetoDAO.getProjetoByNome(nome));
+            tarForm.setVisible(true);
+        }
+    }//GEN-LAST:event_inserirTarButtonActionPerformed
+
+    private void updateProjButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateProjButtonActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_updateProjButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -388,6 +493,7 @@ public class ProjectForm extends javax.swing.JFrame {
     private void listProjects() {
         DefaultTableModel tableModel = new DefaultTableModel(0, 2);
         tableModel.setColumnIdentifiers(new Object[]{"Nome", "Duração"});
+        
 
         bdProjetos = ProjetoDAO.getAllProjetos();
         if (!bdProjetos.isEmpty()) {
@@ -395,13 +501,16 @@ public class ProjectForm extends javax.swing.JFrame {
                 tableModel.addRow(new Object[]{p.getNome(), p.getDuracao()});
             }
             projetosTable.setModel(tableModel);
+            modificarButton.setEnabled(true);
             consultarButton.setEnabled(true);
             deleteButton.setEnabled(true);
         } else {
 
             consultarButton.setEnabled(false);
             deleteButton.setEnabled(false);
+            modificarButton.setEnabled(false);
         }
+        
 
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -412,13 +521,17 @@ public class ProjectForm extends javax.swing.JFrame {
     private javax.swing.JButton criarProjectButton;
     private javax.swing.JButton deleteButton;
     private javax.swing.JSpinner duracaoSpinner;
+    private javax.swing.JButton inserirTarButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JButton modificarButton;
     private javax.swing.JTextField projectNameTxtField;
     private javax.swing.JTable projetosTable;
     private javax.swing.JButton sairButton;
+    private javax.swing.JButton updateProjButton;
     // End of variables declaration//GEN-END:variables
 }

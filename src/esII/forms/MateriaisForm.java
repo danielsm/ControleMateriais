@@ -21,44 +21,53 @@ public class MateriaisForm extends javax.swing.JFrame {
     /**
      * Creates new form MateriaisForm
      */
-    List<Material> materiais = new ArrayList<>();
+    List<Material> bdMateriais;
     Tarefa localTarefa; // tarefa atual
     public MateriaisForm(Tarefa t) {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         this.localTarefa = t;
+        setTitle("Tarefa: "+ t.getId() +" - Materiais");
         initComponents();
-        nomeMatTxt.setEnabled(false);
-        qntdText.setEnabled(false);
-        cancelButton.setEnabled(false);
-        addNewButton.setEnabled(false);
-        confirmButton.setEnabled(false);
-        removerButton.setEnabled(false);
-        
-        
+     
+        listMateriais();
+        clear();
     }
+    
+    
     
     //Listar as os Materias ja adicionados
     private void listMateriais(){
         DefaultTableModel tableModel = new DefaultTableModel(0,3); 
         tableModel.setColumnIdentifiers(new Object[] {"Id","Nome", "Quantidade"});
-        List<Material> bdMateriais = MaterialDAO.getMateriaisByIdTarefa(localTarefa.getId());
+        bdMateriais = MaterialDAO.getMateriaisByIdTarefa(localTarefa.getId());
         
-        for (Material m:bdMateriais){
-            tableModel.addRow(new Object[]{m.getId(),m.getNome(),m.getQuantidade()});
-            materiaisTable.setModel(tableModel);
+        if(!bdMateriais.isEmpty()){
+            for (Material m:bdMateriais){
+                tableModel.addRow(new Object[]{m.getId(),m.getNome(),m.getQuantidade()});
+                materiaisTable.setModel(tableModel);
+                deleteButton.setEnabled(true);
+                editarMatButton.setEnabled(true);
+            }
         }
-        
+        else{
+            deleteButton.setEnabled(false);
+            editarMatButton.setEnabled(false);
+        }
     }
     
     // desabilitar a area de criacao de materiais
     private void clear(){
-        nomeMatTxt.setText("");
-        qntdText.setText("");
-        
+        nomeMatTxt.setText(" ");
+        qntdText.setText(" ");
+        if (!bdMateriais.isEmpty()){
+            deleteButton.setEnabled(true);
+            editarMatButton.setEnabled(true);
+        }
         nomeMatTxt.setEnabled(false);
         qntdText.setEnabled(false);
         cancelButton.setEnabled(false);
         addNewButton.setEnabled(false);
+        atualizarButton.setEnabled(false);
         addMaterialButton.setEnabled(true);
     }
     /**
@@ -74,7 +83,7 @@ public class MateriaisForm extends javax.swing.JFrame {
         materiaisTable = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         addMaterialButton = new javax.swing.JButton();
-        removerButton = new javax.swing.JButton();
+        deleteButton = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         nomeMatTxt = new javax.swing.JTextField();
@@ -83,6 +92,9 @@ public class MateriaisForm extends javax.swing.JFrame {
         addNewButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
         confirmButton = new javax.swing.JButton();
+        editarMatButton = new javax.swing.JButton();
+        jSeparator2 = new javax.swing.JSeparator();
+        atualizarButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -123,10 +135,10 @@ public class MateriaisForm extends javax.swing.JFrame {
             }
         });
 
-        removerButton.setText("Remover");
-        removerButton.addActionListener(new java.awt.event.ActionListener() {
+        deleteButton.setText("Remover");
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                removerButtonActionPerformed(evt);
+                deleteButtonActionPerformed(evt);
             }
         });
 
@@ -148,51 +160,59 @@ public class MateriaisForm extends javax.swing.JFrame {
             }
         });
 
-        confirmButton.setText("Ok");
+        confirmButton.setText("Voltar");
         confirmButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 confirmButtonActionPerformed(evt);
             }
         });
 
+        editarMatButton.setText("Editar");
+        editarMatButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editarMatButtonActionPerformed(evt);
+            }
+        });
+
+        atualizarButton.setText("Atualizar");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 629, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(layout.createSequentialGroup()
-                .addGap(34, 34, 34)
+                .addGap(34, 44, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 544, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(qntdText, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(nomeMatTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 486, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(cancelButton)
-                                .addGap(18, 18, 18)
-                                .addComponent(addNewButton)
-                                .addGap(18, 18, 18)
-                                .addComponent(confirmButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(83, 83, 83))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(removerButton)
-                                .addGap(18, 18, 18)
-                                .addComponent(addMaterialButton)
-                                .addGap(69, 69, 69))))))
+                        .addComponent(deleteButton)
+                        .addGap(18, 18, 18)
+                        .addComponent(editarMatButton, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(addMaterialButton))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 544, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addComponent(jLabel3)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(qntdText, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addComponent(jLabel2)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(nomeMatTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 486, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(cancelButton)
+                        .addGap(18, 18, 18)
+                        .addComponent(atualizarButton)
+                        .addGap(18, 18, 18)
+                        .addComponent(addNewButton)))
+                .addContainerGap(50, Short.MAX_VALUE))
+            .addComponent(jSeparator2)
+            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(confirmButton, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(47, 47, 47))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -204,7 +224,8 @@ public class MateriaisForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addMaterialButton)
-                    .addComponent(removerButton))
+                    .addComponent(deleteButton)
+                    .addComponent(editarMatButton))
                 .addGap(13, 13, 13)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(6, 6, 6)
@@ -215,12 +236,16 @@ public class MateriaisForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(qntdText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(confirmButton)
+                    .addComponent(cancelButton)
                     .addComponent(addNewButton)
-                    .addComponent(cancelButton))
-                .addContainerGap(38, Short.MAX_VALUE))
+                    .addComponent(atualizarButton))
+                .addGap(18, 18, 18)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(confirmButton)
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         pack();
@@ -241,8 +266,9 @@ public class MateriaisForm extends javax.swing.JFrame {
     //habilitar a area de criacao de materiais
     private void addMaterialButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMaterialButtonActionPerformed
         // TODO add your handling code here:
+        nomeMatTxt.setText(" ");
+        qntdText.setText(" ");
         addMaterialButton.setEnabled(false);
-        
         nomeMatTxt.setEnabled(true);
         qntdText.setEnabled(true);
         cancelButton.setEnabled(true);
@@ -253,24 +279,27 @@ public class MateriaisForm extends javax.swing.JFrame {
     //Adicionar a nova tarefa ao banco, caso os campos tenham sido preenchidos
     private void addNewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addNewButtonActionPerformed
         // TODO add your handling code here:
-
-       if (nomeMatTxt.getText().isEmpty()){
+       int qntd = Integer.parseInt(qntdText.getText().trim());
+       if (nomeMatTxt.getText().isEmpty() || nomeMatTxt.getText().equals(" ")){
            JOptionPane.showMessageDialog(null, "Insira o nome do Material", "Erro", JOptionPane.ERROR_MESSAGE);
        }
-       if (qntdText.getText().isEmpty() || (!qntdText.getText().isEmpty() && Integer.parseInt(qntdText.getText()) <= 0)){
-           JOptionPane.showMessageDialog(null, "A Quantidade deve ser maior que 0", "Erro", JOptionPane.ERROR_MESSAGE);
+       else if (qntdText.getText().isEmpty() || qntdText.getText().equals(" ")){
+           JOptionPane.showMessageDialog(null, "A Quantidade não foi informada", "Erro", JOptionPane.ERROR_MESSAGE);
+       }
+       else if (qntd <= 0){
+           JOptionPane.showMessageDialog(null, "A Quantidade deve ser maior que 0", "Erro", JOptionPane.ERROR_MESSAGE); 
        }
        
-       if (!nomeMatTxt.getText().isEmpty() && !qntdText.getText().isEmpty() && Integer.parseInt(qntdText.getText()) > 0){
-           int num = Integer.parseInt(qntdText.getText());  
+       else {
+          
            Material m = new Material();
            m.setId_tarefa(localTarefa.getId());
-           m.setNome(nomeMatTxt.getText());
-           m.setQuantidade(Integer.parseInt(qntdText.getText()));
-           materiais.add(m);
+           m.setNome(nomeMatTxt.getText().trim());
+           m.setQuantidade(qntd);
+           
            MaterialDAO.criaMaterial(m);
                    
-           removerButton.setEnabled(true);
+           deleteButton.setEnabled(true);
            confirmButton.setEnabled(true);
            clear();
            listMateriais();
@@ -278,11 +307,11 @@ public class MateriaisForm extends javax.swing.JFrame {
     }//GEN-LAST:event_addNewButtonActionPerformed
     
     //remover uma tarefa selecionada
-    private void removerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerButtonActionPerformed
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         // TODO add your handling code here:
         int index = materiaisTable.getSelectedRow();
         
-        List<Material> bdMateriais = MaterialDAO.getMateriaisByIdTarefa(localTarefa.getId());
+        bdMateriais = MaterialDAO.getMateriaisByIdTarefa(localTarefa.getId());
         
         if (index >= 0){
             int id = Integer.parseInt(materiaisTable.getModel().getValueAt(index, 0).toString());
@@ -294,14 +323,31 @@ public class MateriaisForm extends javax.swing.JFrame {
             DefaultTableModel tableModel = (DefaultTableModel)materiaisTable.getModel();
             tableModel.setNumRows(0);
             JOptionPane.showMessageDialog(null, "Material excluido com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-            
+            listMateriais();
         }
         else {
-            JOptionPane.showMessageDialog(null,"Nenhuma Material foi selecionado", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null,"Nenhum Material foi selecionado", "Erro", JOptionPane.ERROR_MESSAGE);
         } 
         
         
-    }//GEN-LAST:event_removerButtonActionPerformed
+    }//GEN-LAST:event_deleteButtonActionPerformed
+
+    private void editarMatButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarMatButtonActionPerformed
+        // TODO add your handling code here:
+        int index = materiaisTable.getSelectedRow();
+        if (index >= 0){
+            addMaterialButton.setEnabled(false);
+            deleteButton.setEnabled(false);
+            editarMatButton.setEnabled(false);
+            nomeMatTxt.setEnabled(true);
+            nomeMatTxt.setText(materiaisTable.getModel().getValueAt(index, 1).toString());
+            qntdText.setEnabled(true);
+            qntdText.setText(materiaisTable.getModel().getValueAt(index, 2).toString());
+            
+            cancelButton.setEnabled(true);
+            atualizarButton.setEnabled(true);
+        }
+    }//GEN-LAST:event_editarMatButtonActionPerformed
     
     
 
@@ -343,16 +389,19 @@ public class MateriaisForm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addMaterialButton;
     private javax.swing.JButton addNewButton;
+    private javax.swing.JButton atualizarButton;
     private javax.swing.JButton cancelButton;
     private javax.swing.JButton confirmButton;
+    private javax.swing.JButton deleteButton;
+    private javax.swing.JButton editarMatButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTable materiaisTable;
     private javax.swing.JTextField nomeMatTxt;
     private javax.swing.JTextField qntdText;
-    private javax.swing.JButton removerButton;
     // End of variables declaration//GEN-END:variables
 }

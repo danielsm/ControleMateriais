@@ -162,7 +162,7 @@ public class ConsultaForm extends javax.swing.JFrame {
        
         tarefas = TarefaDAO.getTarefasByNomeProjeto(projeto.getNome());
         String situacaoMat,situacaTar;
-        DefaultTableModel tableModel = new DefaultTableModel(0, 3);
+        DefaultTableModel tableModel = new DefaultTableModel(0, 4);
         tableModel.setColumnIdentifiers(new Object[]{"Material","Situação (Material)", "Tarefa", "Situação (Tarefa)"});
         
         for (Tarefa t:tarefas){

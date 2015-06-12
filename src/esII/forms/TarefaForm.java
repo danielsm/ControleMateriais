@@ -8,7 +8,6 @@ package esII.forms;
 import esII.dao.*;
 import esII.entidades.Projeto;
 import esII.entidades.Tarefa;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -22,15 +21,14 @@ public class TarefaForm extends javax.swing.JFrame {
     /**
      * Creates new form TarefaForm
      */
-    List<Tarefa> localTarefas = new ArrayList<>(); 
+    List<Tarefa> bdTarefas;
     Projeto projetoLocal; // Projeto que esta sendo criado, vindo do form anterior, ProjectForm.
     public TarefaForm(Projeto p) {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         this.projetoLocal = p;
-        setTitle("Projeto "+p.getNome() +"- Tarefas");
+        setTitle("Projeto "+p.getNome() +" - Tarefas");
         initComponents();
-        finalizarTarButton.setEnabled(false);
-        deleteButton.setEnabled(false);
+        listTarefas();
         clear();
     }
     
@@ -55,11 +53,15 @@ public class TarefaForm extends javax.swing.JFrame {
         addNewTarButton = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
         cancelButton = new javax.swing.JButton();
-        finalizarTarButton = new javax.swing.JButton();
+        voltarButton = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         deleteButton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tarefasTable = new javax.swing.JTable();
+        jSeparator1 = new javax.swing.JSeparator();
+        updateTarButton = new javax.swing.JButton();
+        inserirMatButton = new javax.swing.JButton();
+        editarTarButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -92,10 +94,10 @@ public class TarefaForm extends javax.swing.JFrame {
             }
         });
 
-        finalizarTarButton.setText("Finalizar");
-        finalizarTarButton.addActionListener(new java.awt.event.ActionListener() {
+        voltarButton.setText("Voltar");
+        voltarButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                finalizarTarButtonActionPerformed(evt);
+                voltarButtonActionPerformed(evt);
             }
         });
 
@@ -110,20 +112,20 @@ public class TarefaForm extends javax.swing.JFrame {
 
         tarefasTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Descrição", "Inicio (Semana)", "Duração"
+                "Id", "Descrição", "Inicio (Semana)", "Duração"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -136,45 +138,81 @@ public class TarefaForm extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(tarefasTable);
 
+        updateTarButton.setText("Atualizar");
+        updateTarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateTarButtonActionPerformed(evt);
+            }
+        });
+
+        inserirMatButton.setText("Editar/Inserir Material");
+        inserirMatButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inserirMatButtonActionPerformed(evt);
+            }
+        });
+
+        editarTarButton.setText("Editar");
+        editarTarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editarTarButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jSeparator2)
             .addGroup(layout.createSequentialGroup()
-                .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(descricaoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(26, 26, 26)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addGap(135, 135, 135)
+                                    .addComponent(deleteButton)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(editarTarButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(addTarefaButton))
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(135, 135, 135)
-                        .addComponent(deleteButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(addTarefaButton))
-                    .addComponent(jLabel1)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
+                                .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(inicioSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(29, 29, 29)
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(durSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(7, 7, 7))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(cancelButton)
-                                .addGap(18, 18, 18)
-                                .addComponent(addNewTarButton)
-                                .addGap(18, 18, 18)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(finalizarTarButton)
-                            .addComponent(jLabel5))))
-                .addContainerGap(14, Short.MAX_VALUE))
+                                .addComponent(descricaoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel3)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(inicioSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(29, 29, 29)
+                                        .addComponent(jLabel4)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(durSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(7, 7, 7))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(cancelButton)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(inserirMatButton)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(updateTarButton)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(addNewTarButton)
+                                    .addComponent(jLabel5))))))
+                .addContainerGap(20, Short.MAX_VALUE))
+            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(voltarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -189,10 +227,11 @@ public class TarefaForm extends javax.swing.JFrame {
                         .addGap(145, 145, 145)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(deleteButton)
-                            .addComponent(addTarefaButton))))
+                            .addComponent(addTarefaButton)
+                            .addComponent(editarTarButton))))
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(descricaoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -203,12 +242,17 @@ public class TarefaForm extends javax.swing.JFrame {
                     .addComponent(jLabel4)
                     .addComponent(durSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
-                .addGap(29, 29, 29)
+                .addGap(23, 23, 23)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(finalizarTarButton)
                     .addComponent(addNewTarButton)
-                    .addComponent(cancelButton))
-                .addContainerGap(24, Short.MAX_VALUE))
+                    .addComponent(cancelButton)
+                    .addComponent(updateTarButton)
+                    .addComponent(inserirMatButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(voltarButton)
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         pack();
@@ -220,19 +264,29 @@ public class TarefaForm extends javax.swing.JFrame {
         descricaoTextField.setText("");
         inicioSpinner.setValue(o);
         durSpinner.setValue(o);
-        
+        if (!bdTarefas.isEmpty()){
+            deleteButton.setEnabled(true);
+            editarTarButton.setEnabled(true);
+        }
         descricaoTextField.setEnabled(false);
         inicioSpinner.setEnabled(false);
         durSpinner.setEnabled(false);
         addNewTarButton.setEnabled(false); 
         cancelButton.setEnabled(false);
+        updateTarButton.setEnabled(false);
+        inserirMatButton.setEnabled(false);
         addTarefaButton.setEnabled(true);
     }
     
     // Habilita a area de criacao de nova tarefa quando pressionado o botao Adicionar Nova
     private void addTarefaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addTarefaButtonActionPerformed
         // TODO add your handling code here:
+        descricaoTextField.setText(" ");
+        inicioSpinner.setValue((Object)0);
+        durSpinner.setValue((Object)0);
         addTarefaButton.setEnabled(false);
+        editarTarButton.setEnabled(false);
+        deleteButton.setEnabled(false);
         descricaoTextField.setEnabled(true);
         inicioSpinner.setEnabled(true);
         durSpinner.setEnabled(true);
@@ -244,15 +298,21 @@ public class TarefaForm extends javax.swing.JFrame {
     private void listTarefas(){
          DefaultTableModel tableModel = new DefaultTableModel(0,4); 
          tableModel.setColumnIdentifiers(new Object[]{"Id","Descrição","Inicio(Semana)","Duração"});
-         List<Tarefa> bdTarefas = TarefaDAO.getTarefasByNomeProjeto(projetoLocal.getNome());
-
-         for (Tarefa t:bdTarefas){
-            tableModel.addRow(new Object[]{t.getId(),t.getDescricao(),t.getSemanaInicio(),t.getDuracao()});
-            tarefasTable.setModel(tableModel);
-
-        }
-         //tarefasJList.setModel(listModel);
-         deleteButton.setEnabled(true);
+         bdTarefas = TarefaDAO.getTarefasByNomeProjeto(projetoLocal.getNome());
+         
+         if (!bdTarefas.isEmpty()){
+            for (Tarefa t:bdTarefas){
+               tableModel.addRow(new Object[]{t.getId(),t.getDescricao(),t.getSemanaInicio(),t.getDuracao()});
+               tarefasTable.setModel(tableModel);
+               deleteButton.setEnabled(true);
+               editarTarButton.setEnabled(true);
+            }
+         }
+         else{
+             
+           deleteButton.setEnabled(false);
+           editarTarButton.setEnabled(false);  
+         }
     }
     
     //Adiciona uma nova tarefa ao banco, ligada ao projeto atual
@@ -260,7 +320,7 @@ public class TarefaForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         String desc;
         int dur, inicio;
-        desc = descricaoTextField.getText();
+        desc = descricaoTextField.getText().trim();
         
         inicio = (Integer)inicioSpinner.getValue();
         dur = (Integer)durSpinner.getValue();
@@ -269,31 +329,30 @@ public class TarefaForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Por favor insira uma descrição", "Erro", JOptionPane.ERROR_MESSAGE);
         }
         
-        if (inicio <= 0){
+        else if (inicio <= 0){
             JOptionPane.showMessageDialog(null, "Tarefa deve iniciar pelo menos na 1ª semana", "Erro", JOptionPane.ERROR_MESSAGE);
         }
         
-        if (dur <= 0){
+        else if (dur <= 0){
             JOptionPane.showMessageDialog(null, "Tarefa deve ter no minimo 1 semana de duração", "Erro", JOptionPane.ERROR_MESSAGE);
         }
         
-        if (!desc.isEmpty() && inicio > 0 && dur > 0){
+        else if (!desc.isEmpty() && inicio > 0 && dur > 0){
             if (inicio+(dur-1) <= projetoLocal.getDuracao()){
                 Tarefa t = new Tarefa();
                 t.setDescricao(desc);
                 t.setNome_projeto(projetoLocal.getNome());
                 t.setSemanaInicio(inicio);
-                t.setDuracao(dur);
-                localTarefas.add(t);
-                listTarefas();
-                finalizarTarButton.setEnabled(true);
-                
+                t.setDuracao(dur);                
                 TarefaDAO.criaTarefa(t);
                 listTarefas();
-                MateriaisForm matForm = new MateriaisForm(t);
-                matForm.setVisible(true);
                 
-                clear();
+                deleteButton.setEnabled(false);
+                editarTarButton.setEnabled(false);
+                addNewTarButton.setEnabled(false);
+                voltarButton.setEnabled(true);
+                inserirMatButton.setEnabled(true);
+                addTarefaButton.setEnabled(true);
             }
             else{
                 JOptionPane.showMessageDialog(null, "Duração da TAREFA excede a duração do PROJETO", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -310,11 +369,11 @@ public class TarefaForm extends javax.swing.JFrame {
     }//GEN-LAST:event_cancelButtonActionPerformed
     
     // quando pelo menos 1 tarefa eh criada, o usuario pode sair do form de criacao de tarefas.
-    private void finalizarTarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_finalizarTarButtonActionPerformed
+    private void voltarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_voltarButtonActionPerformed
         // TODO add your handling code here:
        
         dispose();
-    }//GEN-LAST:event_finalizarTarButtonActionPerformed
+    }//GEN-LAST:event_voltarButtonActionPerformed
     
     //Deletar uma tarefa criada
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
@@ -340,6 +399,83 @@ public class TarefaForm extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_deleteButtonActionPerformed
+
+    private void inserirMatButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inserirMatButtonActionPerformed
+        // TODO add your handling code here:
+        String desc = descricaoTextField.getText().trim();
+        int inicio = (Integer)inicioSpinner.getValue();
+        int dur = (Integer)durSpinner.getValue();
+        
+        if(desc.isEmpty()){
+            JOptionPane.showMessageDialog(null, "Por favor insira uma descrição", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        else if (inicio <= 0){
+            JOptionPane.showMessageDialog(null, "Tarefa deve iniciar pelo menos na 1ª semana", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        else if (dur <= 0){
+            JOptionPane.showMessageDialog(null, "Tarefa deve ter no minimo 1 semana de duração", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        else if (!desc.isEmpty() && inicio > 0 && dur > 0){
+            if (inicio+(dur-1) <= projetoLocal.getDuracao()){
+               List<Tarefa> tars = TarefaDAO.getTarefasByNomeProjeto(projetoLocal.getNome());
+               for(Tarefa t:tars){
+                   if (t.getDescricao().equals(desc));
+                   MateriaisForm matForm = new MateriaisForm(t);
+                   matForm.setVisible(true);
+               }
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Duração da TAREFA excede a duração do PROJETO", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+            
+        }
+    }//GEN-LAST:event_inserirMatButtonActionPerformed
+
+    private void editarTarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarTarButtonActionPerformed
+        // TODO add your handling code here:
+        int index = tarefasTable.getSelectedRow();
+        
+        if (index >= 0){
+            addTarefaButton.setEnabled(false);
+            editarTarButton.setEnabled(false);
+            deleteButton.setEnabled(false);
+            descricaoTextField.setEnabled(true);
+            descricaoTextField.setText(tarefasTable.getModel().getValueAt(index, 1).toString());
+            inicioSpinner.setEnabled(true);
+            inicioSpinner.setValue((Object)Integer.parseInt(tarefasTable.getModel().getValueAt(index, 2).toString()));
+            durSpinner.setEnabled(true);
+            durSpinner.setValue((Object)Integer.parseInt(tarefasTable.getModel().getValueAt(index, 3).toString()));
+            cancelButton.setEnabled(true);
+            inserirMatButton.setEnabled(true);
+            updateTarButton.setEnabled(true);
+        }
+        else {
+            JOptionPane.showMessageDialog(null,"Nenhuma Tarefa foi selecionada", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_editarTarButtonActionPerformed
+
+    private void updateTarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateTarButtonActionPerformed
+        // TODO add your handling code here:
+        int index = tarefasTable.getSelectedRow();
+        int id = Integer.parseInt(tarefasTable.getModel().getValueAt(index, 0).toString());
+        String desc = tarefasTable.getModel().getValueAt(index, 1).toString();
+        int ini = Integer.parseInt(tarefasTable.getModel().getValueAt(index, 2).toString());
+        int dur = Integer.parseInt(tarefasTable.getModel().getValueAt(index, 3).toString());
+        
+        int selIni = Integer.parseInt(inicioSpinner.getValue().toString());
+        int selDur = Integer.parseInt(durSpinner.getValue().toString());
+        if(!descricaoTextField.getText().equals(desc) || selIni != ini || selDur != dur){
+            Tarefa t = TarefaDAO.getTarefaById(id);
+            t.setDescricao(desc);
+            t.setSemanaInicio(selIni);
+            t.setDuracao(dur);
+            TarefaDAO.updateTarefa(t);
+            listTarefas();
+        }
+    }//GEN-LAST:event_updateTarButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -384,15 +520,19 @@ public class TarefaForm extends javax.swing.JFrame {
     private javax.swing.JButton deleteButton;
     private javax.swing.JTextField descricaoTextField;
     private javax.swing.JSpinner durSpinner;
-    private javax.swing.JButton finalizarTarButton;
+    private javax.swing.JButton editarTarButton;
     private javax.swing.JSpinner inicioSpinner;
+    private javax.swing.JButton inserirMatButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTable tarefasTable;
+    private javax.swing.JButton updateTarButton;
+    private javax.swing.JButton voltarButton;
     // End of variables declaration//GEN-END:variables
 }
