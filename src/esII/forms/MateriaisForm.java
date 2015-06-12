@@ -7,7 +7,6 @@ package esII.forms;
 
 import esII.dao.MaterialDAO;
 import esII.entidades.*;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -175,6 +174,11 @@ public class MateriaisForm extends javax.swing.JFrame {
         });
 
         atualizarButton.setText("Atualizar");
+        atualizarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                atualizarButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -279,31 +283,34 @@ public class MateriaisForm extends javax.swing.JFrame {
     //Adicionar a nova tarefa ao banco, caso os campos tenham sido preenchidos
     private void addNewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addNewButtonActionPerformed
         // TODO add your handling code here:
-       int qntd = Integer.parseInt(qntdText.getText().trim());
+       int qntd = 0;
        if (nomeMatTxt.getText().isEmpty() || nomeMatTxt.getText().equals(" ")){
            JOptionPane.showMessageDialog(null, "Insira o nome do Material", "Erro", JOptionPane.ERROR_MESSAGE);
        }
        else if (qntdText.getText().isEmpty() || qntdText.getText().equals(" ")){
            JOptionPane.showMessageDialog(null, "A Quantidade não foi informada", "Erro", JOptionPane.ERROR_MESSAGE);
        }
-       else if (qntd <= 0){
-           JOptionPane.showMessageDialog(null, "A Quantidade deve ser maior que 0", "Erro", JOptionPane.ERROR_MESSAGE); 
+       else{
+            qntd = Integer.parseInt(qntdText.getText().trim());
+            if (qntd <= 0){
+                JOptionPane.showMessageDialog(null, "A Quantidade deve ser maior que 0", "Erro", JOptionPane.ERROR_MESSAGE); 
+            }
+            else {
+          
+                Material m = new Material();
+                m.setId_tarefa(localTarefa.getId());
+                m.setNome(nomeMatTxt.getText().trim());
+                m.setQuantidade(qntd);
+
+                MaterialDAO.criaMaterial(m);
+
+                deleteButton.setEnabled(true);
+                confirmButton.setEnabled(true);
+                clear();
+                listMateriais();
+            }
        }
        
-       else {
-          
-           Material m = new Material();
-           m.setId_tarefa(localTarefa.getId());
-           m.setNome(nomeMatTxt.getText().trim());
-           m.setQuantidade(qntd);
-           
-           MaterialDAO.criaMaterial(m);
-                   
-           deleteButton.setEnabled(true);
-           confirmButton.setEnabled(true);
-           clear();
-           listMateriais();
-       }
     }//GEN-LAST:event_addNewButtonActionPerformed
     
     //remover uma tarefa selecionada
@@ -347,7 +354,40 @@ public class MateriaisForm extends javax.swing.JFrame {
             cancelButton.setEnabled(true);
             atualizarButton.setEnabled(true);
         }
+        else {
+            JOptionPane.showMessageDialog(null,"Nenhum Material foi selecionado", "Erro", JOptionPane.ERROR_MESSAGE);
+        } 
     }//GEN-LAST:event_editarMatButtonActionPerformed
+
+    private void atualizarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atualizarButtonActionPerformed
+        // TODO add your handling code here:
+        int index = materiaisTable.getSelectedRow();
+        if (index >= 0){
+            int id = Integer.parseInt(materiaisTable.getModel().getValueAt(index, 0).toString());
+            String nome = materiaisTable.getModel().getValueAt(index, 1).toString();
+            int qntd = Integer.parseInt(materiaisTable.getModel().getValueAt(index, 2).toString());
+            
+            String selNome = nomeMatTxt.getText();
+            int selQntd = Integer.parseInt(qntdText.getText());
+            
+            if (!nome.equals(selNome) || qntd != selQntd){
+                if (selQntd > 0){
+                    Material t = MaterialDAO.getMaterialById(id);
+                    t.setNome(selNome);
+                    t.setQuantidade(selQntd);
+                    MaterialDAO.updateMaterial(t);
+                    listMateriais();
+                    clear();
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "A Quantidade deve ser maior que 0", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+        else {
+            JOptionPane.showMessageDialog(null,"Nenhum Material foi selecionado", "Erro", JOptionPane.ERROR_MESSAGE);
+        } 
+    }//GEN-LAST:event_atualizarButtonActionPerformed
     
     
 

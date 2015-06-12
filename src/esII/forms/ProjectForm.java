@@ -433,7 +433,7 @@ public class ProjectForm extends javax.swing.JFrame {
 
     private void inserirTarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inserirTarButtonActionPerformed
         // TODO add your handling code here:
-        String nome = projectNameTxtField.getText();
+        String nome = projectNameTxtField.getText().trim();
         int dur = (Integer) duracaoSpinner.getValue();
         if (nome.equals(" ") || nome.isEmpty()){
              JOptionPane.showMessageDialog(null, "Nenhum projeto selecionado", "Erro", JOptionPane.ERROR_MESSAGE);

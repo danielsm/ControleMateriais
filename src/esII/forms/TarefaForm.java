@@ -243,11 +243,12 @@ public class TarefaForm extends javax.swing.JFrame {
                     .addComponent(durSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
                 .addGap(23, 23, 23)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(addNewTarButton)
-                    .addComponent(cancelButton)
-                    .addComponent(updateTarButton)
-                    .addComponent(inserirMatButton))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(addNewTarButton, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(cancelButton)
+                        .addComponent(updateTarButton)
+                        .addComponent(inserirMatButton)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -379,7 +380,7 @@ public class TarefaForm extends javax.swing.JFrame {
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         // TODO add your handling code here:
         int index = tarefasTable.getSelectedRow();
-        List<Tarefa> bdTarefas = TarefaDAO.getTarefasByNomeProjeto(projetoLocal.getNome());
+        bdTarefas = TarefaDAO.getTarefasByNomeProjeto(projetoLocal.getNome());
 
         if (index >= 0){
             int id = Integer.parseInt(tarefasTable.getModel().getValueAt(index, 0).toString());
@@ -406,32 +407,27 @@ public class TarefaForm extends javax.swing.JFrame {
         int inicio = (Integer)inicioSpinner.getValue();
         int dur = (Integer)durSpinner.getValue();
         
-        if(desc.isEmpty()){
-            JOptionPane.showMessageDialog(null, "Por favor insira uma descrição", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
         
-        else if (inicio <= 0){
+       if (desc.isEmpty() || desc.equals(" ")){
+           JOptionPane.showMessageDialog(null, "Nenhuma Tarefa selecionada","Erro",JOptionPane.ERROR_MESSAGE);
+       }
+       else if(inicio <=0){
             JOptionPane.showMessageDialog(null, "Tarefa deve iniciar pelo menos na 1ª semana", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
-        
-        else if (dur <= 0){
+       }
+       else if(dur <=0){
             JOptionPane.showMessageDialog(null, "Tarefa deve ter no minimo 1 semana de duração", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
-        
-        else if (!desc.isEmpty() && inicio > 0 && dur > 0){
-            if (inicio+(dur-1) <= projetoLocal.getDuracao()){
-               List<Tarefa> tars = TarefaDAO.getTarefasByNomeProjeto(projetoLocal.getNome());
-               for(Tarefa t:tars){
-                   if (t.getDescricao().equals(desc));
-                   MateriaisForm matForm = new MateriaisForm(t);
-                   matForm.setVisible(true);
+       }
+       else {
+           bdTarefas = TarefaDAO.getTarefasByNomeProjeto(projetoLocal.getNome());
+           
+           for (Tarefa t:bdTarefas){
+               if (t.getDescricao().equals(desc)){
+                   
+                   MateriaisForm mat = new MateriaisForm(t);
+                   mat.setVisible(true);
                }
-            }
-            else{
-                JOptionPane.showMessageDialog(null, "Duração da TAREFA excede a duração do PROJETO", "Erro", JOptionPane.ERROR_MESSAGE);
-            }
-            
-        }
+           }
+       }
     }//GEN-LAST:event_inserirMatButtonActionPerformed
 
     private void editarTarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarTarButtonActionPerformed
@@ -460,20 +456,37 @@ public class TarefaForm extends javax.swing.JFrame {
     private void updateTarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateTarButtonActionPerformed
         // TODO add your handling code here:
         int index = tarefasTable.getSelectedRow();
-        int id = Integer.parseInt(tarefasTable.getModel().getValueAt(index, 0).toString());
-        String desc = tarefasTable.getModel().getValueAt(index, 1).toString();
-        int ini = Integer.parseInt(tarefasTable.getModel().getValueAt(index, 2).toString());
-        int dur = Integer.parseInt(tarefasTable.getModel().getValueAt(index, 3).toString());
-        
-        int selIni = Integer.parseInt(inicioSpinner.getValue().toString());
-        int selDur = Integer.parseInt(durSpinner.getValue().toString());
-        if(!descricaoTextField.getText().equals(desc) || selIni != ini || selDur != dur){
-            Tarefa t = TarefaDAO.getTarefaById(id);
-            t.setDescricao(desc);
-            t.setSemanaInicio(selIni);
-            t.setDuracao(dur);
-            TarefaDAO.updateTarefa(t);
-            listTarefas();
+        if (index >=0){
+            int id = Integer.parseInt(tarefasTable.getModel().getValueAt(index, 0).toString());
+            String desc = tarefasTable.getModel().getValueAt(index, 1).toString();
+            int ini = Integer.parseInt(tarefasTable.getModel().getValueAt(index, 2).toString());
+            int dur = Integer.parseInt(tarefasTable.getModel().getValueAt(index, 3).toString());
+            
+            String selDesc = descricaoTextField.getText();
+            int selIni = Integer.parseInt(inicioSpinner.getValue().toString());
+            int selDur = Integer.parseInt(durSpinner.getValue().toString());
+            if(!selDesc.equals(desc) || selIni != ini || selDur != dur){
+                if (selIni > 0){
+                    if (selDur > 0){
+                        Tarefa t = TarefaDAO.getTarefaById(id);
+                        t.setDescricao(selDesc);
+                        t.setSemanaInicio(selIni);
+                        t.setDuracao(selDur);
+                        TarefaDAO.updateTarefa(t);
+                        listTarefas();
+                        clear();
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(null, "Tarefa deve ter no minimo 1 semana de duração", "Erro", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Tarefa deve iniciar pelo menos na 1ª semana", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+        else {
+            JOptionPane.showMessageDialog(null,"Nenhuma Tarefa foi selecionada", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_updateTarButtonActionPerformed
 
