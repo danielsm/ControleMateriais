@@ -4,13 +4,6 @@
  * and open the template in the editor.
  */
 package esII.forms;
-
-import esII.dao.MaterialDAO;
-import esII.dao.TarefaDAO;
-import esII.entidades.*;
-import java.util.List;
-import javax.swing.table.DefaultTableModel;
-
 /**
  *
  * @author daniel
@@ -21,23 +14,8 @@ public class ConsultaForm extends javax.swing.JFrame {
     /**
      * Creates new form ConsultaForm
      */
-    Projeto projeto;
-    int semanaConsulta;
-    List<Tarefa> tarefas;
-    List<Material> materiais;
-    public ConsultaForm(Projeto p, int semana) {
-        
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        this.projeto = p;
-        this.semanaConsulta = semana;
+    public ConsultaForm() {
         initComponents();
-        setTitle("Consulta do Projeto: "+this.projeto.getNome());
-        
-        nomeProjeto.setText(this.projeto.getNome());
-        durProjeto.setText(Integer.toString(this.projeto.getDuracao()) + " Semana(s)");
-        semanaConLabel.setText(Integer.toString(this.semanaConsulta) + "ª");
-        listar();
-        
     }
 
     /**
@@ -95,15 +73,8 @@ public class ConsultaForm extends javax.swing.JFrame {
         jScrollPane2.setViewportView(tarefasTable);
 
         voltarButton.setText("Voltar");
-        voltarButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                voltarButtonActionPerformed(evt);
-            }
-        });
 
         jLabel4.setText("Semana Consultada:");
-
-        semanaConLabel.setText("jLabel5");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -157,46 +128,6 @@ public class ConsultaForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
-    //Lista as Tarefas e Materiais do Projeto selecionado
-    private void listar(){
-       
-        tarefas = TarefaDAO.getTarefasByNomeProjeto(projeto.getNome());
-        String situacaoMat,situacaTar;
-        DefaultTableModel tableModel = new DefaultTableModel(0, 4);
-        tableModel.setColumnIdentifiers(new Object[]{"Material","Situação (Material)", "Tarefa", "Situação (Tarefa)"});
-        
-        for (Tarefa t:tarefas){
-            materiais = MaterialDAO.getMateriaisByIdTarefa(t.getId());
-            for (Material m:materiais){
-                
-                if(semanaConsulta < t.getSemanaInicio()){
-                    situacaTar = "Tarefa Futura";
-                    situacaoMat = "Disponivel";
-                }
-                else if (semanaConsulta >= t.getSemanaInicio() && semanaConsulta <= t.getSemanaInicio()+(t.getDuracao()-1)){
-                    situacaTar = "Em andamento";
-                    situacaoMat = "Em uso";
-                }
-                else {
-                    situacaTar = "Tarefa Finalizada";
-                    situacaoMat = "Usado";
-                }
-                
-                tableModel.addRow(new Object[]{m.getNome(),situacaoMat,t.getDescricao(), situacaTar});
-                tarefasTable.setModel(tableModel);
-            }
-
-        }
-
-        voltarButton.setEnabled(true);
-        
-    }
-    
-    private void voltarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_voltarButtonActionPerformed
-        // TODO add your handling code here:
-        dispose();
-    }//GEN-LAST:event_voltarButtonActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -233,14 +164,14 @@ public class ConsultaForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel durProjeto;
+    public javax.swing.JLabel durProjeto;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JLabel nomeProjeto;
-    private javax.swing.JLabel semanaConLabel;
-    private javax.swing.JTable tarefasTable;
-    private javax.swing.JButton voltarButton;
+    public javax.swing.JLabel nomeProjeto;
+    public javax.swing.JLabel semanaConLabel;
+    public javax.swing.JTable tarefasTable;
+    public javax.swing.JButton voltarButton;
     // End of variables declaration//GEN-END:variables
 }

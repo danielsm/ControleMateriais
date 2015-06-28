@@ -8,7 +8,6 @@ package esII.forms;
 import esII.dao.MaterialDAO;
 import esII.entidades.*;
 import java.util.List;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -20,55 +19,15 @@ public class MateriaisForm extends javax.swing.JFrame {
     /**
      * Creates new form MateriaisForm
      */
-    List<Material> bdMateriais;
-    Tarefa localTarefa; // tarefa atual
-    public MateriaisForm(Tarefa t) {
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        this.localTarefa = t;
-        setTitle("Tarefa: "+ t.getId() +" - Materiais");
+   
+    public MateriaisForm() {
+
         initComponents();
-     
-        listMateriais();
-        clear();
+
     }
     
     
-    
-    //Listar as os Materias ja adicionados
-    private void listMateriais(){
-        DefaultTableModel tableModel = new DefaultTableModel(0,3); 
-        tableModel.setColumnIdentifiers(new Object[] {"Id","Nome", "Quantidade"});
-        bdMateriais = MaterialDAO.getMateriaisByIdTarefa(localTarefa.getId());
-        
-        if(!bdMateriais.isEmpty()){
-            for (Material m:bdMateriais){
-                tableModel.addRow(new Object[]{m.getId(),m.getNome(),m.getQuantidade()});
-                materiaisTable.setModel(tableModel);
-                deleteButton.setEnabled(true);
-                editarMatButton.setEnabled(true);
-            }
-        }
-        else{
-            deleteButton.setEnabled(false);
-            editarMatButton.setEnabled(false);
-        }
-    }
-    
-    // desabilitar a area de criacao de materiais
-    private void clear(){
-        nomeMatTxt.setText(" ");
-        qntdText.setText(" ");
-        if (!bdMateriais.isEmpty()){
-            deleteButton.setEnabled(true);
-            editarMatButton.setEnabled(true);
-        }
-        nomeMatTxt.setEnabled(false);
-        qntdText.setEnabled(false);
-        cancelButton.setEnabled(false);
-        addNewButton.setEnabled(false);
-        atualizarButton.setEnabled(false);
-        addMaterialButton.setEnabled(true);
-    }
+ 
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -88,14 +47,14 @@ public class MateriaisForm extends javax.swing.JFrame {
         nomeMatTxt = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         qntdText = new javax.swing.JTextField();
-        addNewButton = new javax.swing.JButton();
+        addNewMatButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
         confirmButton = new javax.swing.JButton();
         editarMatButton = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
         atualizarButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         materiaisTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -128,57 +87,22 @@ public class MateriaisForm extends javax.swing.JFrame {
         jLabel1.setText("Materiais Cadastrados:");
 
         addMaterialButton.setText("Adicionar Novo");
-        addMaterialButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addMaterialButtonActionPerformed(evt);
-            }
-        });
 
         deleteButton.setText("Remover");
-        deleteButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteButtonActionPerformed(evt);
-            }
-        });
 
         jLabel2.setText("Nome:");
 
         jLabel3.setText("Quantidade:");
 
-        addNewButton.setText("Adicionar");
-        addNewButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addNewButtonActionPerformed(evt);
-            }
-        });
+        addNewMatButton.setText("Adicionar");
 
         cancelButton.setText("Cancelar");
-        cancelButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cancelButtonActionPerformed(evt);
-            }
-        });
 
         confirmButton.setText("Voltar");
-        confirmButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                confirmButtonActionPerformed(evt);
-            }
-        });
 
         editarMatButton.setText("Editar");
-        editarMatButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editarMatButtonActionPerformed(evt);
-            }
-        });
 
         atualizarButton.setText("Atualizar");
-        atualizarButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                atualizarButtonActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -189,8 +113,8 @@ public class MateriaisForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(deleteButton)
-                        .addGap(18, 18, 18)
-                        .addComponent(editarMatButton, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)
+                        .addComponent(editarMatButton, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(addMaterialButton))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -209,7 +133,7 @@ public class MateriaisForm extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(atualizarButton)
                         .addGap(18, 18, 18)
-                        .addComponent(addNewButton)))
+                        .addComponent(addNewMatButton, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(50, Short.MAX_VALUE))
             .addComponent(jSeparator2)
             .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -240,158 +164,24 @@ public class MateriaisForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(qntdText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cancelButton)
-                    .addComponent(addNewButton)
-                    .addComponent(atualizarButton))
-                .addGap(18, 18, 18)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(confirmButton)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(50, 50, 50)
+                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(confirmButton))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cancelButton)
+                            .addComponent(atualizarButton)
+                            .addComponent(addNewMatButton))))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-   
-    // chama o clear para desabilitar a area de criacao de materiais
-    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        // TODO add your handling code here:
-        clear();
-    }//GEN-LAST:event_cancelButtonActionPerformed
-    
-    //apos pelo menos 1 material eh criado, o usuario pode sair desta tela
-    private void confirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmButtonActionPerformed
-        // TODO add your handling code here:
-        dispose();
-    }//GEN-LAST:event_confirmButtonActionPerformed
-    
-    //habilitar a area de criacao de materiais
-    private void addMaterialButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMaterialButtonActionPerformed
-        // TODO add your handling code here:
-        nomeMatTxt.setText(" ");
-        qntdText.setText(" ");
-        addMaterialButton.setEnabled(false);
-        nomeMatTxt.setEnabled(true);
-        qntdText.setEnabled(true);
-        cancelButton.setEnabled(true);
-        addNewButton.setEnabled(true);
-        
-    }//GEN-LAST:event_addMaterialButtonActionPerformed
-    
-    //Adicionar a nova tarefa ao banco, caso os campos tenham sido preenchidos
-    private void addNewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addNewButtonActionPerformed
-        // TODO add your handling code here:
-       int qntd = 0;
-       if (nomeMatTxt.getText().isEmpty() || nomeMatTxt.getText().equals(" ")){
-           JOptionPane.showMessageDialog(null, "Insira o nome do Material", "Erro", JOptionPane.ERROR_MESSAGE);
-       }
-       else if (qntdText.getText().isEmpty() || qntdText.getText().equals(" ")){
-           JOptionPane.showMessageDialog(null, "A Quantidade não foi informada", "Erro", JOptionPane.ERROR_MESSAGE);
-       }
-       else{
-            qntd = Integer.parseInt(qntdText.getText().trim());
-            if (qntd <= 0){
-                JOptionPane.showMessageDialog(null, "A Quantidade deve ser maior que 0", "Erro", JOptionPane.ERROR_MESSAGE); 
-            }
-            else {
-          
-                Material m = new Material();
-                m.setId_tarefa(localTarefa.getId());
-                m.setNome(nomeMatTxt.getText().trim());
-                m.setQuantidade(qntd);
-
-                MaterialDAO.criaMaterial(m);
-
-                deleteButton.setEnabled(true);
-                confirmButton.setEnabled(true);
-                clear();
-                listMateriais();
-            }
-       }
-       
-    }//GEN-LAST:event_addNewButtonActionPerformed
-    
-    //remover uma tarefa selecionada
-    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
-        // TODO add your handling code here:
-        int index = materiaisTable.getSelectedRow();
-        
-        bdMateriais = MaterialDAO.getMateriaisByIdTarefa(localTarefa.getId());
-        
-        if (index >= 0){
-            int id = Integer.parseInt(materiaisTable.getModel().getValueAt(index, 0).toString());
-            for (Material m:bdMateriais){
-                if (id == m.getId()){
-                    MaterialDAO.deletaMaterial(id);
-                }
-            }
-            DefaultTableModel tableModel = (DefaultTableModel)materiaisTable.getModel();
-            tableModel.setNumRows(0);
-            JOptionPane.showMessageDialog(null, "Material excluido com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-            listMateriais();
-        }
-        else {
-            JOptionPane.showMessageDialog(null,"Nenhum Material foi selecionado", "Erro", JOptionPane.ERROR_MESSAGE);
-        } 
-        
-        
-    }//GEN-LAST:event_deleteButtonActionPerformed
-
-    private void editarMatButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarMatButtonActionPerformed
-        // TODO add your handling code here:
-        int index = materiaisTable.getSelectedRow();
-        if (index >= 0){
-            addMaterialButton.setEnabled(false);
-            deleteButton.setEnabled(false);
-            editarMatButton.setEnabled(false);
-            nomeMatTxt.setEnabled(true);
-            nomeMatTxt.setText(materiaisTable.getModel().getValueAt(index, 1).toString());
-            qntdText.setEnabled(true);
-            qntdText.setText(materiaisTable.getModel().getValueAt(index, 2).toString());
-            
-            cancelButton.setEnabled(true);
-            atualizarButton.setEnabled(true);
-        }
-        else {
-            JOptionPane.showMessageDialog(null,"Nenhum Material foi selecionado", "Erro", JOptionPane.ERROR_MESSAGE);
-        } 
-    }//GEN-LAST:event_editarMatButtonActionPerformed
-
-    private void atualizarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atualizarButtonActionPerformed
-        // TODO add your handling code here:
-        int index = materiaisTable.getSelectedRow();
-        if (index >= 0){
-            int id = Integer.parseInt(materiaisTable.getModel().getValueAt(index, 0).toString());
-            String nome = materiaisTable.getModel().getValueAt(index, 1).toString();
-            int qntd = Integer.parseInt(materiaisTable.getModel().getValueAt(index, 2).toString());
-            
-            String selNome = nomeMatTxt.getText();
-            int selQntd = Integer.parseInt(qntdText.getText());
-            
-            if (!nome.equals(selNome) || qntd != selQntd){
-                if (selQntd > 0){
-                    Material t = MaterialDAO.getMaterialById(id);
-                    t.setNome(selNome);
-                    t.setQuantidade(selQntd);
-                    MaterialDAO.updateMaterial(t);
-                    listMateriais();
-                    clear();
-                }
-                else{
-                    JOptionPane.showMessageDialog(null, "A Quantidade deve ser maior que 0", "Erro", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        }
-        else {
-            JOptionPane.showMessageDialog(null,"Nenhum Material foi selecionado", "Erro", JOptionPane.ERROR_MESSAGE);
-        } 
-    }//GEN-LAST:event_atualizarButtonActionPerformed
-    
-    
-
-    /**
+   /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
@@ -427,21 +217,21 @@ public class MateriaisForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton addMaterialButton;
-    private javax.swing.JButton addNewButton;
-    private javax.swing.JButton atualizarButton;
-    private javax.swing.JButton cancelButton;
-    private javax.swing.JButton confirmButton;
-    private javax.swing.JButton deleteButton;
-    private javax.swing.JButton editarMatButton;
+    public javax.swing.JButton addMaterialButton;
+    public javax.swing.JButton addNewMatButton;
+    public javax.swing.JButton atualizarButton;
+    public javax.swing.JButton cancelButton;
+    public javax.swing.JButton confirmButton;
+    public javax.swing.JButton deleteButton;
+    public javax.swing.JButton editarMatButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JTable materiaisTable;
-    private javax.swing.JTextField nomeMatTxt;
-    private javax.swing.JTextField qntdText;
+    public javax.swing.JTable materiaisTable;
+    public javax.swing.JTextField nomeMatTxt;
+    public javax.swing.JTextField qntdText;
     // End of variables declaration//GEN-END:variables
 }

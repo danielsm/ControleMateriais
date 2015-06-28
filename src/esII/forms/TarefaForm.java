@@ -5,13 +5,6 @@
  */
 package esII.forms;
 
-import esII.dao.*;
-import esII.entidades.Projeto;
-import esII.entidades.Tarefa;
-import java.util.List;
-import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
-
 /**
  *
  * @author daniel
@@ -21,15 +14,11 @@ public class TarefaForm extends javax.swing.JFrame {
     /**
      * Creates new form TarefaForm
      */
-    List<Tarefa> bdTarefas;
-    Projeto projetoLocal; // Projeto que esta sendo criado, vindo do form anterior, ProjectForm.
-    public TarefaForm(Projeto p) {
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        this.projetoLocal = p;
-        setTitle("Projeto "+p.getNome() +" - Tarefas");
+    
+    public TarefaForm() {
+
         initComponents();
-        listTarefas();
-        clear();
+
     }
     
    
@@ -63,16 +52,11 @@ public class TarefaForm extends javax.swing.JFrame {
         inserirMatButton = new javax.swing.JButton();
         editarTarButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("Tarefas Cadastradas:");
 
         addTarefaButton.setText("Adicionar Nova");
-        addTarefaButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addTarefaButtonActionPerformed(evt);
-            }
-        });
 
         jLabel2.setText("Descrição:");
 
@@ -81,34 +65,14 @@ public class TarefaForm extends javax.swing.JFrame {
         jLabel4.setText("Duração:");
 
         addNewTarButton.setText("Adicionar");
-        addNewTarButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addNewTarButtonActionPerformed(evt);
-            }
-        });
 
         cancelButton.setText("Cancelar");
-        cancelButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cancelButtonActionPerformed(evt);
-            }
-        });
 
         voltarButton.setText("Voltar");
-        voltarButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                voltarButtonActionPerformed(evt);
-            }
-        });
 
         jLabel5.setText("Semanas");
 
         deleteButton.setText("Remover");
-        deleteButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteButtonActionPerformed(evt);
-            }
-        });
 
         tarefasTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -139,25 +103,10 @@ public class TarefaForm extends javax.swing.JFrame {
         jScrollPane2.setViewportView(tarefasTable);
 
         updateTarButton.setText("Atualizar");
-        updateTarButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                updateTarButtonActionPerformed(evt);
-            }
-        });
 
-        inserirMatButton.setText("Editar/Inserir Material");
-        inserirMatButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inserirMatButtonActionPerformed(evt);
-            }
-        });
+        inserirMatButton.setText("Inserir Material");
 
         editarTarButton.setText("Editar");
-        editarTarButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editarTarButtonActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -211,7 +160,7 @@ public class TarefaForm extends javax.swing.JFrame {
             .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(voltarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(voltarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(33, 33, 33))
         );
         layout.setVerticalGroup(
@@ -258,238 +207,6 @@ public class TarefaForm extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
-    //Metodo para desabilitar a area de edicao e criacao de nova tarefa
-    private void clear(){
-        Object o = (Object)0;
-        descricaoTextField.setText("");
-        inicioSpinner.setValue(o);
-        durSpinner.setValue(o);
-        if (!bdTarefas.isEmpty()){
-            deleteButton.setEnabled(true);
-            editarTarButton.setEnabled(true);
-        }
-        descricaoTextField.setEnabled(false);
-        inicioSpinner.setEnabled(false);
-        durSpinner.setEnabled(false);
-        addNewTarButton.setEnabled(false); 
-        cancelButton.setEnabled(false);
-        updateTarButton.setEnabled(false);
-        inserirMatButton.setEnabled(false);
-        addTarefaButton.setEnabled(true);
-    }
-    
-    // Habilita a area de criacao de nova tarefa quando pressionado o botao Adicionar Nova
-    private void addTarefaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addTarefaButtonActionPerformed
-        // TODO add your handling code here:
-        descricaoTextField.setText(" ");
-        inicioSpinner.setValue((Object)0);
-        durSpinner.setValue((Object)0);
-        addTarefaButton.setEnabled(false);
-        editarTarButton.setEnabled(false);
-        deleteButton.setEnabled(false);
-        descricaoTextField.setEnabled(true);
-        inicioSpinner.setEnabled(true);
-        durSpinner.setEnabled(true);
-        addNewTarButton.setEnabled(true);
-        cancelButton.setEnabled(true);
-    }//GEN-LAST:event_addTarefaButtonActionPerformed
-    
-    // Lista as tarefas existentes ou ja criadas para o projeto atual.
-    private void listTarefas(){
-         DefaultTableModel tableModel = new DefaultTableModel(0,4); 
-         tableModel.setColumnIdentifiers(new Object[]{"Id","Descrição","Inicio(Semana)","Duração"});
-         bdTarefas = TarefaDAO.getTarefasByNomeProjeto(projetoLocal.getNome());
-         
-         if (!bdTarefas.isEmpty()){
-            for (Tarefa t:bdTarefas){
-               tableModel.addRow(new Object[]{t.getId(),t.getDescricao(),t.getSemanaInicio(),t.getDuracao()});
-               tarefasTable.setModel(tableModel);
-               deleteButton.setEnabled(true);
-               editarTarButton.setEnabled(true);
-            }
-         }
-         else{
-             
-           deleteButton.setEnabled(false);
-           editarTarButton.setEnabled(false);  
-         }
-    }
-    
-    //Adiciona uma nova tarefa ao banco, ligada ao projeto atual
-    private void addNewTarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addNewTarButtonActionPerformed
-        // TODO add your handling code here:
-        String desc;
-        int dur, inicio;
-        desc = descricaoTextField.getText().trim();
-        
-        inicio = (Integer)inicioSpinner.getValue();
-        dur = (Integer)durSpinner.getValue();
-        
-        if(desc.isEmpty()){
-            JOptionPane.showMessageDialog(null, "Por favor insira uma descrição", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
-        
-        else if (inicio <= 0){
-            JOptionPane.showMessageDialog(null, "Tarefa deve iniciar pelo menos na 1ª semana", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
-        
-        else if (dur <= 0){
-            JOptionPane.showMessageDialog(null, "Tarefa deve ter no minimo 1 semana de duração", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
-        
-        else if (!desc.isEmpty() && inicio > 0 && dur > 0){
-            if (inicio+(dur-1) <= projetoLocal.getDuracao()){
-                Tarefa t = new Tarefa();
-                t.setDescricao(desc);
-                t.setNome_projeto(projetoLocal.getNome());
-                t.setSemanaInicio(inicio);
-                t.setDuracao(dur);                
-                TarefaDAO.criaTarefa(t);
-                listTarefas();
-                
-                deleteButton.setEnabled(false);
-                editarTarButton.setEnabled(false);
-                addNewTarButton.setEnabled(false);
-                voltarButton.setEnabled(true);
-                inserirMatButton.setEnabled(true);
-                addTarefaButton.setEnabled(true);
-            }
-            else{
-                JOptionPane.showMessageDialog(null, "Duração da TAREFA excede a duração do PROJETO", "Erro", JOptionPane.ERROR_MESSAGE);
-            }
-            
-        }
-       
-    }//GEN-LAST:event_addNewTarButtonActionPerformed
-    
-    // Desabilitar a area de criaca de tarefa
-    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        // TODO add your handling code here:
-        clear();
-    }//GEN-LAST:event_cancelButtonActionPerformed
-    
-    // quando pelo menos 1 tarefa eh criada, o usuario pode sair do form de criacao de tarefas.
-    private void voltarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_voltarButtonActionPerformed
-        // TODO add your handling code here:
-       
-        dispose();
-    }//GEN-LAST:event_voltarButtonActionPerformed
-    
-    //Deletar uma tarefa criada
-    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
-        // TODO add your handling code here:
-        int index = tarefasTable.getSelectedRow();
-        bdTarefas = TarefaDAO.getTarefasByNomeProjeto(projetoLocal.getNome());
-
-        if (index >= 0){
-            int id = Integer.parseInt(tarefasTable.getModel().getValueAt(index, 0).toString());
-            for (Tarefa t:bdTarefas){
-                if (id == t.getId()){
-                    TarefaDAO.deletaTarefa(id);
-                }
-            }
-            DefaultTableModel tableModel = (DefaultTableModel)tarefasTable.getModel();
-            tableModel.setNumRows(0);
-            listTarefas();
-            JOptionPane.showMessageDialog(null, "Tarefa excluida com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-            
-        }
-        else {
-            JOptionPane.showMessageDialog(null,"Nenhuma Tarefa foi selecionada", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
-        
-    }//GEN-LAST:event_deleteButtonActionPerformed
-
-    private void inserirMatButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inserirMatButtonActionPerformed
-        // TODO add your handling code here:
-        String desc = descricaoTextField.getText().trim();
-        int inicio = (Integer)inicioSpinner.getValue();
-        int dur = (Integer)durSpinner.getValue();
-        
-        
-       if (desc.isEmpty() || desc.equals(" ")){
-           JOptionPane.showMessageDialog(null, "Nenhuma Tarefa selecionada","Erro",JOptionPane.ERROR_MESSAGE);
-       }
-       else if(inicio <=0){
-            JOptionPane.showMessageDialog(null, "Tarefa deve iniciar pelo menos na 1ª semana", "Erro", JOptionPane.ERROR_MESSAGE);
-       }
-       else if(dur <=0){
-            JOptionPane.showMessageDialog(null, "Tarefa deve ter no minimo 1 semana de duração", "Erro", JOptionPane.ERROR_MESSAGE);
-       }
-       else {
-           bdTarefas = TarefaDAO.getTarefasByNomeProjeto(projetoLocal.getNome());
-           
-           for (Tarefa t:bdTarefas){
-               if (t.getDescricao().equals(desc)){
-                   
-                   MateriaisForm mat = new MateriaisForm(t);
-                   mat.setVisible(true);
-               }
-           }
-       }
-    }//GEN-LAST:event_inserirMatButtonActionPerformed
-
-    private void editarTarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarTarButtonActionPerformed
-        // TODO add your handling code here:
-        int index = tarefasTable.getSelectedRow();
-        
-        if (index >= 0){
-            addTarefaButton.setEnabled(false);
-            editarTarButton.setEnabled(false);
-            deleteButton.setEnabled(false);
-            descricaoTextField.setEnabled(true);
-            descricaoTextField.setText(tarefasTable.getModel().getValueAt(index, 1).toString());
-            inicioSpinner.setEnabled(true);
-            inicioSpinner.setValue((Object)Integer.parseInt(tarefasTable.getModel().getValueAt(index, 2).toString()));
-            durSpinner.setEnabled(true);
-            durSpinner.setValue((Object)Integer.parseInt(tarefasTable.getModel().getValueAt(index, 3).toString()));
-            cancelButton.setEnabled(true);
-            inserirMatButton.setEnabled(true);
-            updateTarButton.setEnabled(true);
-        }
-        else {
-            JOptionPane.showMessageDialog(null,"Nenhuma Tarefa foi selecionada", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
-    }//GEN-LAST:event_editarTarButtonActionPerformed
-
-    private void updateTarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateTarButtonActionPerformed
-        // TODO add your handling code here:
-        int index = tarefasTable.getSelectedRow();
-        if (index >=0){
-            int id = Integer.parseInt(tarefasTable.getModel().getValueAt(index, 0).toString());
-            String desc = tarefasTable.getModel().getValueAt(index, 1).toString();
-            int ini = Integer.parseInt(tarefasTable.getModel().getValueAt(index, 2).toString());
-            int dur = Integer.parseInt(tarefasTable.getModel().getValueAt(index, 3).toString());
-            
-            String selDesc = descricaoTextField.getText();
-            int selIni = Integer.parseInt(inicioSpinner.getValue().toString());
-            int selDur = Integer.parseInt(durSpinner.getValue().toString());
-            if(!selDesc.equals(desc) || selIni != ini || selDur != dur){
-                if (selIni > 0){
-                    if (selDur > 0){
-                        Tarefa t = TarefaDAO.getTarefaById(id);
-                        t.setDescricao(selDesc);
-                        t.setSemanaInicio(selIni);
-                        t.setDuracao(selDur);
-                        TarefaDAO.updateTarefa(t);
-                        listTarefas();
-                        clear();
-                    }
-                    else{
-                        JOptionPane.showMessageDialog(null, "Tarefa deve ter no minimo 1 semana de duração", "Erro", JOptionPane.ERROR_MESSAGE);
-                    }
-                }
-                else{
-                    JOptionPane.showMessageDialog(null, "Tarefa deve iniciar pelo menos na 1ª semana", "Erro", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        }
-        else {
-            JOptionPane.showMessageDialog(null,"Nenhuma Tarefa foi selecionada", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
-    }//GEN-LAST:event_updateTarButtonActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -527,15 +244,15 @@ public class TarefaForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton addNewTarButton;
-    private javax.swing.JButton addTarefaButton;
-    private javax.swing.JButton cancelButton;
-    private javax.swing.JButton deleteButton;
-    private javax.swing.JTextField descricaoTextField;
-    private javax.swing.JSpinner durSpinner;
-    private javax.swing.JButton editarTarButton;
-    private javax.swing.JSpinner inicioSpinner;
-    private javax.swing.JButton inserirMatButton;
+    public javax.swing.JButton addNewTarButton;
+    public javax.swing.JButton addTarefaButton;
+    public javax.swing.JButton cancelButton;
+    public javax.swing.JButton deleteButton;
+    public javax.swing.JTextField descricaoTextField;
+    public javax.swing.JSpinner durSpinner;
+    public javax.swing.JButton editarTarButton;
+    public javax.swing.JSpinner inicioSpinner;
+    public javax.swing.JButton inserirMatButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -544,8 +261,8 @@ public class TarefaForm extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JTable tarefasTable;
-    private javax.swing.JButton updateTarButton;
-    private javax.swing.JButton voltarButton;
+    public javax.swing.JTable tarefasTable;
+    public javax.swing.JButton updateTarButton;
+    public javax.swing.JButton voltarButton;
     // End of variables declaration//GEN-END:variables
 }
